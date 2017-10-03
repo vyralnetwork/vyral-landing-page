@@ -986,3 +986,35 @@ p.signup_no_spam{
 		overflow-y:auto!important;
 	}
 }
+@media (max-width: 900px) and (orientation: landscape) {
+	.l-canvas.sidebar_none .video_lightbox .l-section{
+		padding-right:6rem;
+	}
+
+}
+@media (max-height: 600px) and (orientation: landscape) {
+	.main_menu_block {
+		padding-top: 200px;
+	}
+}
+@media (max-height: 500px) and (orientation: landscape) {
+	.main_menu_block {
+		padding-top: 150px;
+	}
+}
+@media (max-height: 400px) and (orientation: landscape) {
+	ul.main_nav_list{
+		font-size:15px;
+	}
+	ul.main_nav_list a {
+		padding: 3px 0;
+	}
+	ul.main_nav_list li {
+		margin-bottom:5px;
+	}
+}
+@media (max-height: 350px) and (orientation: landscape) {
+	.main_menu_block {
+		padding-top: 120px;
+	}
+}
