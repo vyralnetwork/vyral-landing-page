@@ -1,3 +1,6 @@
+test_mode = false;
+test_inisec = 0
+
 
 var waitForFinalEvent = (function () {
   var timers = {};
@@ -12,18 +15,27 @@ var waitForFinalEvent = (function () {
   };
 })();
 
+readyBeforeDefinitions = [];
 jQuery(document).ready(function(){
+
+	for(i = 0; i<readyBeforeDefinitions.length;i++){
+		(readyBeforeDefinitions[i])();
+	}
 	
 
 	jQuery("#main_menu_link").click(function(){
-		
+		/*
 		if(jQuery("body").hasClass("main_menu_open")){
 			closeMainMenu();
 		}else{
 			openMainMenu();
 		}
+		
+		*/
+		
+		animToSection(0)
 	})
-
+/*
 	jQuery(".main_menu_close").click(function(){
 		if(jQuery("body").hasClass("main_menu_open")){
 			closeMainMenu();
@@ -55,12 +67,15 @@ jQuery(document).ready(function(){
 		excludedElements: ""
 	});
 	
-
+*/
 
 	setActionsVideoHome()
-	setActionsSignUp()
 	setUpPreloaderAnimation()
-
+	
+	if(test_mode){
+		stopPreloader()
+		setStartAppear()
+	}
 })
 jQuery(window).on('load', function () {
 	 setTimeout(function(){stopPreloaderFirst()}, 200)
@@ -69,16 +84,15 @@ pageHasLoad = false;
 function stopPreloaderFirst(){
 	pageHasLoad = true;
 	jQuery("body").addClass("first_loaded_completed")
-	//stopPreloader()
-	//setStartAppear()
+
 }
 function stopPreloader(){
 	jQuery("body").removeClass("ajax_loading")
-	TweenMax.to("#trama_preloader", .5, {autoAlpha:0})
+	TweenMax.to("#site_preloader", .5, {autoAlpha:0})
 }
 function startPreloader(){
 	jQuery("body").addClass("ajax_loading")
-	TweenMax.to("#trama_preloader", .5, {autoAlpha:1})
+	TweenMax.to("#site_preloader", .5, {autoAlpha:1})
 }
 
 
@@ -171,7 +185,7 @@ console.log(pcIniDate);
 var offset = pcIniDate.getTimezoneOffset()*60*1000;
 //var NYCtimeoffset = -400*60*1000;
 //Coordinated with GMT Universal, which is 4 hours ahead NYC, so 15h GMT is 11am NYC
-var countdownEndDate = new Date("October 31, 2017 15:00:00");
+var countdownEndDate = new Date("December 1, 2017 15:00:00");
 countdownEndDate.setTime(countdownEndDate.getTime() - offset);
 var countdownEndDate_time = countdownEndDate.getTime();
 
@@ -401,57 +415,6 @@ function clearVideoPlayerHome(){
 	video_player_iframe.attr("src", home_video_src)
 	
 }
-
-
-
-
-function setActionsSignUp(){
-	
-	//home_video_src = jQuery(".video_lightbox .the_video iframe").attr("src")
-	
-	signup_block = jQuery(".signup_lightbox")
-	
-	TweenMax.set(signup_block,{autoAlpha:0})
-	/*
-	jQuery(".signup_lightbox .video_player_bg,.signup_lightbox .signup_button_back").click(function(){
-		closeSignupBlock();
-	})
-	jQuery(".join_our_list").click(function(e){
-		e.preventDefault();
-		openSignupBlock();
-	})*/
-	jQuery(".join_our_list").click(function(e){
-		waitForFinalEvent(function(){
-			jQuery("div[data-leadbox-wrap-ignore='true']").addClass("join_us_auto_box")
-		}, 200, "fix_join_list");
-		
-	})
-	
-	
-}
-
-function openSignupBlock(){
-	signup_block = jQuery(".signup_lightbox")
-	video_player_bg = jQuery(".signup_lightbox .video_player_bg ")
-	content_block = jQuery(".signup_lightbox .signup_form_block")
-	TweenMax.to(signup_block,.2,{autoAlpha:1, ease:Power3.easeOut})
-	TweenMax.set(video_player_bg,{width:0})
-	TweenMax.to(video_player_bg,.6,{width:"100%", ease:Power3.easeOut})
-	
-	TweenMax.set(content_block.parent(),{perspective:1200})
-	TweenMax.set(content_block,{scale:.8,top:100,autoAlpha:0, rotationX:-90,transformStyle:"preserve-3d"})
-	TweenMax.to(content_block,.7,{scale:1,autoAlpha:1,top:0,rotationX:0, ease:Power3.easeOut,delay:.3, clearProps:"transform,top,opacity,visibility,scale"})
-}
-function closeSignupBlock(){
-	signup_block = jQuery(".signup_lightbox")
-	video_player_bg = jQuery(".signup_lightbox .video_player_bg ")
-	content_block = jQuery(".signup_lightbox .signup_form_block")
-	TweenMax.to(signup_block,.4,{autoAlpha:0, ease:Power3.easeOut,delay:.3 })
-	TweenMax.to(video_player_bg,.5,{width:0, ease:Power3.easeOut, delay:.1})
-	
-	TweenMax.to(content_block,.3,{scale:.8,autoAlpha:0, ease:Power3.easeOut})
-}
-
 
 
 
@@ -755,3 +718,828 @@ function doBgGlitch(){
 	
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**************
+
+Fullscreen sections actions
+
+***************/
+
+
+
+
+fullScreenSections = "";
+jQuery(document).ready(function(){
+	
+	
+	
+	
+	updateFullscreenSections()
+	jQuery(".l-section-video video").each(function(){
+		jQuery(this).get(0).pause();
+	});
+	
+	setControls()
+	setCurrentSec()
+	jQuery("body").unmousewheel(mouseWheelWork);
+	jQuery("body").mousewheel(mouseWheelWork);
+	
+	
+	if(test_mode && test_inisec > -1){
+		animToSection(test_inisec)
+	}
+})
+
+
+function setControls(){
+	cloneStepStr = jQuery("#portfolio_control_step_clone").html();
+	stepsStr = "";
+	jQuery("#portfolio_control_steps").html("");
+	fullScreenSections.each(function(index){
+		name = jQuery(this).attr("nav_name")
+		if(name == undefined || name == "undefined") name = "";
+		name = decodeURIComponent(name.replace(/\+/g, '%20'));
+		thisstep = cloneStepStr;
+		thisstep = thisstep.replace("%name%", name); 
+		thisstep = thisstep.replace("%section_index%", index); 
+		thisstep = jQuery(thisstep)
+		if(name =="" ) thisstep.addClass("hiddenStep")
+		//stepsStr += thisstep;
+		jQuery("#portfolio_control_steps").append(thisstep)
+	})
+	if(fullScreenSections.length <= 1){
+		jQuery("#site_portfolio_controls").fadeOut();
+	}else{
+		jQuery("#site_portfolio_controls").fadeIn();
+	}
+	
+	jQuery(".portfolio_control_step").click(function(){
+		animToSection(jQuery(this).attr("section_index"))
+	})
+	
+	fixLabelPosition()
+
+	
+	jQuery(".portfolio_control_arrow_up").unbind("click").click(function(e){
+		e.preventDefault();
+		animToSectionPrev()
+	})
+	jQuery(".portfolio_control_arrow_down").unbind("click").click(function(e){
+		e.preventDefault();
+		animToSectionNext()
+	})
+	
+	
+}
+function updateControls(){
+	jQuery("#site_portfolio_controls .portfolio_control_step.current").removeClass("current")
+	if(currentSection > -1)
+	jQuery("#site_portfolio_controls .portfolio_control_step").eq(currentSection).addClass("current")
+}
+if(typeof secIntroFunctionQueue == 'undefined')
+	secIntroFunctionQueue = []
+function animateSecIntro(){
+	console.log("Sec Intro "+currentSection)
+	animateSecs = fullScreenSections.eq(currentSection).find(".animate_afb,.animate_afl,.animate_afr").not(".animate_start")
+	TweenMax.killTweensOf(animateSecs);
+	TweenMax.to(animateSecs, .01, {delay:+.2,className:"+=animate_start"});
+
+	for(i = 0; i<secIntroFunctionQueue.length;i++){
+		(secIntroFunctionQueue[i])(fullScreenSections.eq(currentSection));
+	}
+	
+
+	
+}
+if(typeof secOutFunctionQueue == 'undefined')
+	secOutFunctionQueue = []
+function animateSecOut(index){
+	animate_elements = fullScreenSections.eq(index).find(".animate_afb,.animate_afl,.animate_afr")
+	TweenMax.killTweensOf(animate_elements);
+	TweenMax.to(animate_elements, .01, {delay:.4, onComplete:checkIfCurrentSec,onCompleteParams:[index]});
+	for(i = 0; i<secOutFunctionQueue.length;i++){
+		(secOutFunctionQueue[i])(fullScreenSections.eq(index));
+	}
+}
+function checkIfCurrentSec(index){
+	if(index != currentSection){
+		animate_elements = fullScreenSections.eq(index).find(".animate_afb,.animate_afl,.animate_afr")
+		TweenMax.set(animate_elements, {className:"-=animate_start"});
+	}
+}
+
+
+secScrollIsAnim = -1;
+function unlockScroll(){
+	setCurrentSec()
+	waitForFinalEvent(function(){
+      unlockScroll_fn()
+    }, 500, "unlockScroll");
+}
+function unlockScroll_fn(){
+	secScrollIsAnim = 0;
+	
+}
+
+function updateFullscreenSections(){
+
+	fullScreenSections = [];
+	fullScreenSections = jQuery(".l-main .l-section.height_full");
+	if(fullScreenSections.length > 1){
+		jQuery("body").addClass("hasControls")
+	}else{
+		jQuery("body").removeClass("hasControls")
+	}
+
+}
+minDif = 9999;
+currentSection = -1
+function setCurrentSec(){
+	if(fullScreenSections.length > 0){
+		currentScroll = jQuery(window).scrollTop();
+		currentSec = -1;
+		minDif = 9999;
+		//console.log(currentSec)
+		fullScreenSections.each(function(index){
+			secpos = jQuery(this).offset().top
+			if(secpos-currentScroll < minDif){
+				currentSec = index;
+				minDif = currentScroll-secpos;
+			}
+		})
+		//console.log("currentSection: "+currentSection+" currentSec: "+currentSec)
+		if(currentSec != -1){
+			setCurrentSec_num(currentSec)
+		}
+	}
+}
+function setCurrentSec_num(new_sec){
+	currentSec = new_sec
+	if(currentSection != currentSec){
+		if(currentSection != -1){
+			fullScreenSections.eq(currentSection).removeClass("current_section")
+			animateSecOut(currentSection)
+		}
+		currentSection = currentSec;
+		fullScreenSections.eq(currentSection).addClass("current_section")
+		
+		if(fullScreenSections.eq(currentSection).hasClass("color_alternate")){
+			jQuery("body").addClass("controls_light_color")
+		}else{
+			jQuery("body").removeClass("controls_light_color")
+		}
+		updateControls();
+		animateSecIntro();
+	}
+}
+
+function mouseWheelWork(event, delta){
+	
+		if(isNavOpen){
+			event.preventDefault();
+		}else if(secScrollIsAnim == 1){
+			event.preventDefault();
+		}else if(jQuery(window).width() < 800){
+			
+		}else if(fullScreenSections.length > 1){
+			body = jQuery("html, body");
+			currentScroll = jQuery(window).scrollTop();
+			windowHeight = jQuery(window).height();
+			setCurrentSec()
+			currentSec = currentSection;
+			
+			if(delta > 0 && currentSec > 0){
+				if(currentSec-1 >= 0 && minDif <= 0){
+					event.preventDefault();
+					animToSection_delay(currentSec-1)
+				}
+			}else if(delta < 0){
+				if(currentSec+1 <= fullScreenSections.length-1 
+					 && (fullScreenSections.eq(currentSec).height() + fullScreenSections.eq(currentSec).offset().top - currentScroll <= windowHeight )
+					){
+					event.preventDefault();
+					animToSection_delay(currentSec+1)
+					
+				}
+			}
+		}
+	
+}
+function animToSection_delay(index){
+	waitForFinalEvent(function(){
+		animToSection(index)
+    }, 10, "animToSection");
+}
+function animToSection(index){
+	console.log("animToSection:"+index)
+	if(secScrollIsAnim != 1){
+		
+		setCurrentSec_num(index)
+		body = jQuery("html, body");
+		secScrollIsAnim = 1;
+		TweenMax.killTweensOf(body);
+		if(fullScreenSections.length == 0) to_scrollTop = 0
+		else to_scrollTop = fullScreenSections.eq(index).offset().top;
+		
+		TweenMax.to(body, .7, {scrollTop:to_scrollTop, ease:Power3.easeInOut, onComplete:unlockScroll})
+	}
+}
+
+function animToSectionNext(){
+	index = currentSection+1;
+	if( index <= fullScreenSections.length-1 )
+		animToSection(index)
+}
+function animToSectionPrev(){
+	index = currentSection-1;
+	if( index >= 0 )
+		animToSection(index)
+}
+
+jQuery(document).scroll(function (event) {
+	if(secScrollIsAnim != 1)
+    checkCurrentSection()
+});
+jQuery(window).resize(function (event) {
+	resizeSections()
+});
+function checkCurrentSection(){
+	waitForFinalEvent(function(){
+		if(secScrollIsAnim != 1)
+		checkCurrentSection_fn()
+    }, 50, "checkCurrentSection");
+}
+function checkCurrentSection_fn(){
+	if(secScrollIsAnim != 1)
+	setCurrentSec()
+}
+
+function resizeSections(){
+		waitForFinalEvent(function(){
+		resizeSections_fn();
+		}, 50, "resizeSections_fn");
+}
+function resizeSections_fn(){
+	
+	if(secScrollIsAnim != 1){
+		currentSection_temp = currentSection
+		waitForFinalEvent(function(){
+			if(jQuery(window).width() > 800){
+				animToSection(currentSection_temp);
+			}
+		
+		}, 20, "animToSection");
+		
+	}
+
+	fixLabelPosition()
+}
+
+function fixLabelPosition(){
+	waitForFinalEvent(function(){
+		fixLabelPosition_fn()
+	}, 50, "fixLabelPosition");
+}
+function fixLabelPosition_fn(){
+
+	jQuery(".portfolio_control_step").each(function(){
+		_h = jQuery(this).height()
+		_label = jQuery(this).find(".portfolio_control_step_label");
+		TweenMax.set(_label, {transition:"none"})
+		TweenMax.set(_label, {top:(_h/2-_label.height()/2)})
+		waitForFinalEvent(function(){
+			TweenMax.set(".portfolio_control_step_label", {clearProps:"transition"})
+		}, 10, "fixLabelPositionTransitions");
+		
+	})
+
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* document ready: */
+readyBeforeDefinitions.push(site_ready_before);
+function site_ready_before(){
+
+	fadeInElements = jQuery(".sequenced_fadein")
+	TweenMax.killTweensOf(fadeInElements)
+	TweenMax.set(fadeInElements,{autoAlpha:0,scale:.7})	
+	
+	bg_lights = jQuery.find(".background_light_filter_corners");
+	TweenMax.killTweensOf(bg_lights)
+	TweenMax.set(bg_lights,{autoAlpha:0})
+	
+	
+}
+
+
+secIntroFunctionQueue.push(site_secintro);
+function site_secintro(_currentsec){
+		
+		
+		
+		fadeInDelay = .5;
+		if(jQuery(window).width() < 1000){
+			fadeInDelay = 0;
+		}
+
+		fadeInElements = _currentsec.find(".sequenced_fadein")
+		TweenMax.killTweensOf(fadeInElements)
+		TweenMax.staggerTo(fadeInElements,.5,{delay:fadeInDelay,autoAlpha:1,scale:1,ease:Power3.easeOut,clearProps:"opacity,visibility,transform,scale"},.1)
+		
+		bg_lights = _currentsec.find(".background_light_filter_corners");
+		TweenMax.killTweensOf(bg_lights)
+		TweenMax.to(bg_lights,1,{delay:fadeInDelay,autoAlpha:1,ease:Power1.easeInOut,clearProps:"opacity,visibility"})
+		
+		
+		/* tokens intro animations: */
+		lines_h = _currentsec.find(".ti_deco_line_h");
+		lines_v = _currentsec.find(".ti_deco_line_v");
+		token_icons = _currentsec.find(".token_item_icon");
+		TweenMax.set(_currentsec.find(".token_item_content"), {perspective:600});
+		TweenMax.killTweensOf(lines_h)
+		TweenMax.killTweensOf(lines_v)
+		TweenMax.killTweensOf(token_icons)
+		TweenMax.set(lines_v, {clearProps:"height"})
+		TweenMax.set(lines_h, {clearProps:"width"})
+		TweenMax.set(token_icons, {clearProps:"scale,rotationY,transform,autoAlpha,opacity,visibility"})
+		TweenMax.staggerFrom(lines_h,.3,{delay:fadeInDelay+.25,width:0,ease:Power1.easeOut,clearProps:"width"}, .5)
+		TweenMax.staggerFrom(lines_v,.3,{delay:fadeInDelay,height:0,ease:Power1.easeOut,clearProps:"height"}, .5)
+		TweenMax.staggerFrom(token_icons,1,{delay:fadeInDelay,scale:.7,autoAlpha:0,rotationY:-180,ease:Back.easeOut,clearProps:"scale,rotationY,transform,autoAlpha,opacity,visibility"}, .5)
+		
+		
+		
+		/* circle charts intro animations: */
+		TweenMax.set(_currentsec.find(".circle_chart_item_content"), {perspective:600});
+		circle_active = _currentsec.find(".circle_active");
+		TweenMax.killTweensOf(circle_active)
+		circle_active.each(function(){
+			TweenMax.set(jQuery(this), {strokeDasharray:jQuery(this).attr("data-stroke-dasharray") })
+		})
+		TweenMax.staggerFrom(circle_active, 1, {delay: fadeInDelay,strokeDasharray:"0 566" }, .5)
+		
+		circle_clock = _currentsec.find(".circle_clock")
+		TweenMax.killTweensOf(circle_clock)
+		TweenMax.set(circle_clock, {strokeDasharray:circle_clock.attr("data-stroke-dasharray") })
+		TweenMax.from(circle_clock, 1, {delay: fadeInDelay + 2,strokeDasharray:"1 566" })
+		
+		circle_data = _currentsec.find(".circle_chart_icon_data_block");
+		TweenMax.killTweensOf(circle_data)
+		TweenMax.set(circle_data, {clearProps:"all"})
+		TweenMax.staggerFrom(circle_data, .5, {delay: fadeInDelay,autoAlpha:0, ease:Power3.easeOut, clearProps:"all"}, .5)
+		
+		circle_bg = _currentsec.find(".circle_chart_icon_bg_block");
+		TweenMax.killTweensOf(circle_bg)
+		TweenMax.set(circle_bg, {clearProps:"all"})
+		TweenMax.staggerFrom(circle_bg, .7, {delay: fadeInDelay,rotationY:180,autoAlpha:0, ease:Back.easeOut, clearProps:"all"}, .5)
+		
+		circle_constelacion = _currentsec.find(".circle_chart_icon_bg_dots");
+		TweenMax.killTweensOf(circle_constelacion)
+		TweenMax.set(circle_constelacion, { transition:"none", clearProps:"width,height,left,top,opacity"})
+		TweenMax.staggerFrom(circle_constelacion, 2, {delay:fadeInDelay ,width:"100%",height:"100%", opacity:0,left:"0%",top:"0%", ease:Power1.easeInOut, clearProps:"all"}, .5)
+		
+		
+		roadm_hlines = _currentsec.find(".roadmap_hline .line_color_fill");
+		TweenMax.killTweensOf(roadm_hlines)
+		TweenMax.set(roadm_hlines, { transition:"none", clearProps:"width,height,left,top,opacity"})
+		TweenMax.staggerFrom(roadm_hlines, .4, {delay:fadeInDelay ,width:0, ease:Linear.easeNone, clearProps:"all"}, .35)
+		
+		if(_currentsec.find(".roadmap_block").length > 0){
+			roadMapAnimTo(0)
+		}
+		
+		roadm_vlines = _currentsec.find(".roadmap_vline");
+		TweenMax.killTweensOf(roadm_vlines)
+		TweenMax.set(roadm_vlines, { transition:"none", clearProps:"scale,transform"})
+		TweenMax.staggerFrom(roadm_vlines, .3, {delay:fadeInDelay ,scale:0, ease:Power3.easeOut, clearProps:"all"}, .2)
+		
+
+		roadm_numbs = _currentsec.find(".roadmap_topnumber");
+		TweenMax.set(roadm_numbs.parent(), {perspective:600});
+		TweenMax.killTweensOf(roadm_numbs)
+		TweenMax.set(roadm_numbs, { transition:"none", clearProps:"scale,transform"})
+		TweenMax.staggerFrom(roadm_numbs, .6, {delay:fadeInDelay ,rotationY:-90, ease:Power3.easeOut, clearProps:"all"}, .3)
+		
+		roadm_copy = _currentsec.find(".roadmap_copy");
+		TweenMax.set(roadm_copy.parent(), {perspective:600});
+		TweenMax.killTweensOf(roadm_copy)
+		TweenMax.set(roadm_copy, { transition:"none", clearProps:"scale,transform,opacity,visibility"})
+		TweenMax.staggerFrom(roadm_copy, .6, {delay:fadeInDelay ,scale:.7, autoAlpha:0, ease:Power3.easeOut, clearProps:"all"}, .4)
+		
+		
+		nodes_block = _currentsec.find(".nodes_block");
+		TweenMax.set(nodes_block, {perspective:600});
+		nodes_bgs = _currentsec.find(".nodes_bg");
+		TweenMax.killTweensOf(nodes_bgs)
+		TweenMax.set(nodes_bgs, { clearProps:"all"})
+		TweenMax.staggerFrom(nodes_bgs, 1.5, {delay:fadeInDelay ,scale:.7, autoAlpha:0, ease:Power3.easeOut, clearProps:"all"}, .1)
+
+		
+		nodes_copy = _currentsec.find(".nodes_textbox");
+		TweenMax.killTweensOf(nodes_copy)
+		TweenMax.set(nodes_copy, { clearProps:"all"})
+		TweenMax.staggerFrom(nodes_copy, .7, {delay:fadeInDelay, rotationY:-90, autoAlpha:0,  ease:Power3.easeOut, clearProps:"all"}, .9)
+		
+		
+		nodes_copylines1 = _currentsec.find(".nodes_textbox_decoline_h");
+		TweenMax.killTweensOf(nodes_copylines1)
+		TweenMax.set(nodes_copylines1, { clearProps:"all"})
+		TweenMax.staggerFrom(nodes_copylines1, .2, {delay:fadeInDelay+.4, scaleX:0,  ease:Power1.easeOut, clearProps:"all"}, .4)
+		
+		
+		nodes_copylines2 = _currentsec.find(".nodes_textbox_decoline_v");
+		TweenMax.killTweensOf(nodes_copylines2)
+		TweenMax.set(nodes_copylines2, { clearProps:"all"})
+		TweenMax.staggerFrom(nodes_copylines2, .2, {delay:fadeInDelay+.6, scaleY:0,  ease:Power1.easeOut, clearProps:"all"}, .4)
+		
+		if( _currentsec.find(".team_block").length > 0){
+			teamOpen(_current_memeber_index, 1)
+		}
+		
+		
+		if(jQuery(window).width() > 767){
+		teamsquare_lines1 = _currentsec.find(".team_head_frame_line_v");
+		TweenMax.killTweensOf(teamsquare_lines1)
+		TweenMax.set(teamsquare_lines1, { clearProps:"all"})
+		TweenMax.staggerFrom(teamsquare_lines1, .3, {delay:fadeInDelay+.3, height:0, ease:Linear.easeNone, clearProps:"all"}, .6)
+		
+		teamsquare_lines2 = _currentsec.find(".team_head_frame_line_h");
+		TweenMax.killTweensOf(teamsquare_lines2)
+		TweenMax.set(teamsquare_lines2, { clearProps:"all"})
+		TweenMax.staggerFrom(teamsquare_lines2, .3, {delay:fadeInDelay+.6, width:0, ease:Linear.easeNone, clearProps:"all"}, .6)
+		
+		}
+		
+		_currentsec.find(".l-section-video video").each(function(){
+			jQuery(this).get(0).play();
+		});
+		
+		
+		
+		rewards_transition = _currentsec.find(".rewards_transition_zoom")
+		TweenMax.killTweensOf(rewards_transition)
+		TweenMax.set(rewards_transition, {position:"absolute", autoAlpha:0})
+		
+		rewards_block = _currentsec.find(".rewards_block_anim");
+		
+		if(_prevsec_memo != ""){
+			ref_reward_element = _prevsec_memo.find(".nodes_bg_main")
+			if(ref_reward_element.length > 0 && rewards_block.length > 0){
+				
+				if(jQuery(window).width() > 800){
+					new_top = - jQuery(window).height()
+					
+					TweenMax.set(ref_reward_element, {autoAlpha:0})
+					
+					TweenMax.killTweensOf(rewards_block)
+					TweenMax.set(rewards_block, {clearProps:"all"})
+					TweenMax.set(rewards_block, {top:new_top+"px", scale:.5, autoAlpha:0})
+					TweenMax.to(rewards_block, .5,{autoAlpha:1, ease:Power1.easeOut})
+					TweenMax.to(rewards_block, .7,{ top:0,ease:Power3.easeInOut})
+					TweenMax.to(rewards_block, 1.5,{scale:1, left:0,autoAlpha:1, ease:Power3.easeOut, clearProps:"all"})
+				}
+			}
+		}
+
+		
+
+		
+		_prevsec_memo = _currentsec;
+		
+}
+_prevsec_memo = "";
+
+secOutFunctionQueue.push(site_secout);
+function site_secout(_prevsec){
+		if(jQuery(window).width() > 676){
+			fadeInElements2 = _prevsec.find(".sequenced_fadein")
+			TweenMax.killTweensOf(fadeInElements2)
+			TweenMax.staggerTo(fadeInElements2,.5,{autoAlpha:0,scale:.7,ease:Power3.easeInOut},-.05)
+			
+		}
+		
+		
+		bg_lights = _prevsec.find(".background_light_filter_corners");
+		TweenMax.killTweensOf(bg_lights)
+		TweenMax.to(bg_lights,.3,{autoAlpha:0,ease:Power3.easeInOut})
+		
+		
+		nodes_bgs = _prevsec.find(".nodes_bg");
+		TweenMax.killTweensOf(nodes_bgs)
+	
+		TweenMax.staggerTo(nodes_bgs, .2, {scale:.7, autoAlpha:0, ease:Power3.easeIn}, -.03)
+
+		_prevsec.find(".l-section-video video").each(function(){
+			jQuery(this).get(0).pause();
+		});
+		
+}
+
+
+
+
+
+jQuery(document).ready(function(){
+	
+	setRoadmap()
+	
+})
+
+function setRoadmap(){
+	jQuery(".roadmap_arrowcontrols .arrowcontrol_right").click(function(){
+		roadMapAnimToNext(1);
+	})
+	jQuery(".roadmap_arrowcontrols .arrowcontrol_left").click(function(){
+		roadMapAnimToNext(-1);
+	})
+	roadMapAnimTo(0)
+	
+	jQuery(".roadmap_list_maskblock").swipe( {
+		swipeLeft:function(event, direction, distance, duration, fingerCount) {
+			roadMapAnimToNext(1);
+		},
+		swipeRight:function(event, direction, distance, duration, fingerCount) {
+			roadMapAnimToNext(-1);
+		}
+	});
+	
+}
+function roadMapAnimTo(index){
+	
+
+	
+	roadmap_leftoffset = getRoadmapOffset();
+	
+	
+	_currentsec = fullScreenSections.eq(currentSec);
+	_roadmap_block = _currentsec.find(".roadmap_block")
+	
+	
+	
+	
+	if(_roadmap_block.length > 0){
+		
+		_roadmap_blockanim = _roadmap_block.find(".roadmap_list_holder")
+		_roadmap_items = _roadmap_block.find("ul.roadmap_list>li")
+		
+		min_to_show = getRoadmapMinToShow()
+		
+		if(index > _roadmap_items.length-min_to_show){
+			index = _roadmap_items.length-min_to_show;
+		}
+		if(index < 0){
+			index = 0;
+		}
+		
+		
+		_roadmap_item_to = _roadmap_items.eq(index);
+		if(_roadmap_item_to.length == 0){
+			_roadmap_item_to = _roadmap_items.eq(0);
+		}
+		
+		if(index >= 2){
+			_roadmap_block.addClass("hide_roadmap_title")
+		}else{
+			_roadmap_block.removeClass("hide_roadmap_title")
+		}
+		
+		item_pos = _roadmap_item_to.position()
+		TweenMax.killTweensOf(_roadmap_blockanim)
+		current_x = _roadmap_blockanim.position().left
+		TweenMax.set(_roadmap_blockanim, {left:-item_pos.left+roadmap_leftoffset})
+		updateActiveRoadmapItems(_currentsec)
+		TweenMax.from(_roadmap_blockanim, .7, {left:current_x, ease:Power3.easeOut})
+		
+	}
+	
+	
+}
+function updateActiveRoadmapItems(_currentsec){
+	_leftoffset = getRoadmapOffset()
+	_roadmap_items = _currentsec.find("ul.roadmap_list>li")
+	container_x = _roadmap_items.closest(".roadmap_list_holder").position().left
+	_previtem = "";
+	_roadmap_items.each(function(ind){
+		this_x = jQuery(this).position().left
+		this_x_relative = this_x + container_x - _leftoffset;
+		
+		if(this_x_relative + 20 > 0){
+			jQuery(this).removeClass("item_ofuscated")
+		}else{
+			jQuery(this).addClass("item_ofuscated")
+		}
+		if(_previtem != ""){
+			if(Math.abs(this_x_relative) < 20){
+				_previtem.addClass("item_ofuscated_border")
+			}else{
+				_previtem.removeClass("item_ofuscated_border")
+			}
+		}
+		_previtem = jQuery(this)
+	})
+}
+
+
+function roadMapAnimToNext(direction){
+	_leftoffset = getRoadmapOffset();
+	_currentsec = fullScreenSections.eq(currentSec);
+	_roadmap_blockanim = _currentsec.find(".roadmap_list_holder")
+	_roadmap_items = _currentsec.find("ul.roadmap_list>li")
+	
+	container_x = _roadmap_items.closest(".roadmap_list_holder").position().left
+	min_distance_x = 9999
+	_roadmap_items.each(function(index){
+		this_x = jQuery(this).position().left
+		this_x_relative = this_x + container_x - _leftoffset;
+		
+		if(Math.abs(this_x_relative) < min_distance_x){
+			min_distance_x = Math.abs(this_x_relative);
+			current_index = index;
+		}
+	})
+	
+	itemsToMove = getRoadmapSteps();
+	
+	new_index = current_index+itemsToMove*direction;
+	
+
+	
+	roadMapAnimTo(new_index)
+
+	
+}
+function getRoadmapOffset(){
+	win_w = jQuery(window).width();
+	if(win_w > 767){
+		return 150;
+	}else {
+		return 50;
+	}
+	
+}
+function getRoadmapSteps(){
+	win_w = jQuery(window).width();
+	if(win_w > 1350){
+		return 3;
+	}else if(win_w > 1000){
+		return 2;
+	}else{
+		return 1;
+	}
+	
+}
+function getRoadmapMinToShow(){
+	win_w = jQuery(window).width();
+	if(win_w > 1500){
+		return 4;
+	}else if(win_w > 1000){
+		return 3;
+	}else{
+		return 1;
+	}
+}
+
+
+
+
+
+
+
+
+jQuery(document).ready(function(){
+	
+	setTeam()
+	
+})
+_current_memeber_index = -1;
+function setTeam(){
+	jQuery(".team_controls .arrowcontrol_right").click(function(){
+		teamOpenNext(1);
+	})
+	jQuery(".team_controls .arrowcontrol_left").click(function(){
+		teamOpenNext(-1);
+	})
+	team_items = jQuery("ul.team_list li")
+
+	TweenMax.set(team_items, {autoAlpha:0, position:"absolute", left:0, top:0})
+	
+	background_team_imgs = jQuery(".background_team_imgs")
+	background_team_imgs.html("")
+	team_control_dots = jQuery("ul.team_control_dots")
+	team_control_dots.html("")
+	team_items.each(function(index){
+		team_control_dots.append('<li class="team_control_dot" data_index="'+index+'" >\
+									<div class="menu_dot_item"></div>\
+								</li>')
+		bg_team_img = jQuery("<div class='background_team_img'></div>")
+		TweenMax.set(bg_team_img, {autoAlpha:0,backgroundImage: 'url('+jQuery(this).find(".ref_img").attr("src")+')'})
+		bg_team_img.attr("data_index",index)
+		bg_team_img.addClass("background_team_img_"+index)
+		background_team_imgs.append(bg_team_img)
+	})
+	
+	jQuery(".team_control_dot").click(function(){
+		teamOpen(parseInt(jQuery(this).attr("data_index")), 1)
+	})
+
+	jQuery(".team_block").closest("section").swipe( {
+		swipeLeft:function(event, direction, distance, duration, fingerCount) {
+			teamOpenNext(1);
+		},
+		swipeRight:function(event, direction, distance, duration, fingerCount) {
+			teamOpenNext(-1);
+		}
+	});
+	teamOpen(0, 1)
+
+}
+function teamOpen(_index, direction){
+	
+	team_items = jQuery("ul.team_list li")
+	if(_index < 0)
+		_index = team_items.length-1
+	else if(_index > team_items.length-1)
+		_index = 0
+	
+	_prev_member = jQuery("ul.team_list li.current_team")
+	team_items.removeClass("current_team")
+
+	bg_images = jQuery(".background_team_imgs .background_team_img")
+	_prev_bg_image = bg_images.eq(_current_memeber_index);
+	_next_bg_image = bg_images.eq(_index);
+	console.log("_next_bg_image "+_next_bg_image.length)
+	if(_prev_bg_image.length > 0){
+		TweenMax.killTweensOf(_prev_bg_image)
+		if(direction == 1) newleft = 0; else newleft = 100;
+		TweenMax.to(_prev_bg_image, 1, {width:0, left:newleft+"%",ease:Power3.easeInOut})
+	}
+	TweenMax.killTweensOf(_next_bg_image)
+	if(direction == 1) newleft = 100; else newleft = 0;
+	TweenMax.set(_next_bg_image, {width:0, left:newleft+"%", autoAlpha:0})
+	TweenMax.to(_next_bg_image, 1, {width:"100%", left:0, autoAlpha:1,ease:Power3.easeInOut})
+	
+	
+	
+	TweenMax.set(_prev_member, {autoAlpha:0, position:"absolute",left:-100*direction+"px",scale:.9,rotationY:-30*direction, top:0})
+	TweenMax.from(_prev_member,.3, {autoAlpha:1,left:0,scale:1,rotationY:0, ease:Power3.easeOut})
+	
+	TweenMax.set(".team_list", {perspective:600})
+	
+	_current_memeber_index = _index;
+	_current_memeber = team_items.eq(_current_memeber_index);
+	TweenMax.set(_current_memeber,{clearProps:"all"})
+	
+	TweenMax.from(_current_memeber,.5, {autoAlpha:0,left:100*direction+"px",scale:.9, rotationY:30*direction, ease:Power3.easeInOut})
+	
+	_current_memeber.addClass("current_team")
+	
+
+	
+	
+	updateTeamControlDots()
+	
+}
+function teamOpenNext(direction){
+	
+	new_index = _current_memeber_index+direction;
+
+	teamOpen(new_index, direction)
+}
+
+function updateTeamControlDots(){
+	team_control_dots = jQuery(".team_control_dot");
+	team_control_dots.removeClass("current_item");
+	team_control_dots.eq(_current_memeber_index).addClass("current_item");
+}
