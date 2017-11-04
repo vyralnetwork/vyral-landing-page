@@ -77,6 +77,7 @@ jQuery(document).ready(function(){
 		setStartAppear()
 	}
 })
+
 jQuery(window).on('load', function () {
 	 setTimeout(function(){stopPreloaderFirst()}, 200)
 });
@@ -176,7 +177,27 @@ function closeMainMenu(){
 
 
 
+var lastScrollTop = 0;
+jQuery(window).scroll(function(event){
+	waitForFinalEvent(function(){
+		checkScrollDirectionClass();
+	}, 10, "checkScrollDirectionClass");
 
+});
+function checkScrollDirectionClass(){
+	delta = 10
+	var st = jQuery(window).scrollTop();
+	if(jQuery(window).scrollTop() < delta){
+		jQuery("body").removeClass("scrollingDown")
+	}else if (st > lastScrollTop + delta){
+		// downscroll code
+		jQuery("body").addClass("scrollingDown")
+	} else if (st < lastScrollTop - delta){
+		// upscroll code
+		jQuery("body").removeClass("scrollingDown")
+	}
+	lastScrollTop = st;
+}
 
 
 
@@ -216,9 +237,13 @@ function printDateCountdown(){
 	  // Display the result in the element with id="demo"
 	  
 		printDateValue(jQuery("#value_days"), days)
+		printDateValue(jQuery("#top_value_days"), days)
 		printDateValue(jQuery("#value_hours"), hours)
+		printDateValue(jQuery("#top_value_hours"), hours)
 		printDateValue(jQuery("#value_mins"), minutes)
+		printDateValue(jQuery("#top_value_mins"), minutes)
 		printDateValue(jQuery("#value_secs"), seconds)
+		printDateValue(jQuery("#top_value_secs"), seconds)
 
 
 		if(days == 0){
@@ -231,17 +256,23 @@ function printDateCountdown(){
 		clearInterval(countdown_internval);
 		jQuery("#countdown_home").addClass("less_than_a_day");
 		jQuery("#value_days").html(0);
+		jQuery("#top_value_days").html(0);
 		jQuery("#value_hours").html(0);
+		jQuery("#top_value_hours").html(0);
 		jQuery("#value_mins").html(0);
+		jQuery("#top_value_mins").html(0);
 		jQuery("#value_secs").html(0);
+		jQuery("#top_value_secs").html(0);
 		jQuery("#countdown_home").addClass("finished");
 		
 	  }
 	
 }
 function printDateValue(_target, _value){
-	current_value = _target.html();
+	current_value = _target.attr("current_val");
 	if(current_value != _value && typeof _value == 'number' && _value > -1){
+		_target.attr("current_val", _value);
+		if(_value < 10) _value = "0"+_value
 		_target.html(_value)
 		TweenMax.killTweensOf(_target);
 		TweenMax.set(_target,{scale:.7 });
@@ -343,8 +374,8 @@ function setStartAppear(){
 		play_button_bg = jQuery(".play_button_block .play_button .block_button_bg")
 		home_background_block = jQuery(".home_background_block")
 		
-		home_copy_text = jQuery(".home_copy_text_block")
-		home_copy_title = jQuery(".home_copy_title_block")
+		home_copy_text = jQuery(".home_copy .home_copy_text_block")
+		home_copy_title = jQuery(".home_copy .home_copy_title_block")
 		
 		tl_start = new TimelineMax({
 			onComplete:function(){}	
@@ -596,7 +627,7 @@ function resizeBgImages(){
 		})
 	})
 }
-function animateBgImages(_slide){
+function animateBgImages(_slide, delay_time){
 	
 	_imageleft = _slide.find(".home_background_image_left")
 	_imageright = _slide.find(".home_background_image_right")
@@ -613,12 +644,12 @@ function animateBgImages(_slide){
 	TweenMax.set(_slide,{autoAlpha:1})
 	
 	TweenMax.set(_imageright,{width:0})
-	TweenMax.to(_imageright,1,{width:"50%",ease:Power3.easeInOut, clearProps:"width"})
+	TweenMax.to(_imageright,1,{delay:delay_time, width:"50%",ease:Power3.easeInOut, clearProps:"width"})
 
 	_pieces = _slide.find(".home_background_image_left_piece")
 	TweenMax.set(_imageleft,{autoAlpha:0})
 	_pieces.each(function(){
-		TweenMax.from(jQuery(this),1,{width:0,height:0,top:"+="+(Math.ceil(Math.random()*70))+"px",ease:Power3.easeInOut, delay:Math.random()*.7,onComplete:resizeBgImagesDelay,onCompleteParams:[_slide]})
+		TweenMax.from(jQuery(this),1,{delay:delay_time, width:0,height:0,top:"+="+(Math.ceil(Math.random()*70))+"px",ease:Power3.easeInOut, delay:Math.random()*.7,onComplete:resizeBgImagesDelay,onCompleteParams:[_slide]})
 	})
 }
 
@@ -657,7 +688,7 @@ function showNextBgSlide(){
 	}
 	current_slide = bg_slides.eq(currentBgSlide)
 	current_slide.addClass("current_bgslide")
-	animateBgImages(current_slide);
+	animateBgImages(current_slide, 0);
 	/*
 	waitForFinalEvent(function(){
 		showNextBgSlide();
@@ -673,7 +704,7 @@ function showNextBgSlide(){
 
 
 
-
+/*
 
 function startBgGlitch(){
 	jQuery(".home_background_image_glitch").each(function(){
@@ -718,7 +749,7 @@ function doBgGlitch(){
 	
 }
 
-
+*/
 
 
 
@@ -751,6 +782,12 @@ jQuery(document).ready(function(){
 	updateFullscreenSections()
 	jQuery(".l-section-video video").each(function(){
 		jQuery(this).get(0).pause();
+		TweenMax.set(jQuery(this), {display:"none"})
+		jQuery(this).find("source").each(function(){
+			vid_src = jQuery(this).attr("src")
+			jQuery(this).attr("data-src", vid_src)
+			jQuery(this).attr("src", "")
+		})
 	});
 	
 	setControls()
@@ -1027,6 +1064,30 @@ function fixLabelPosition_fn(){
 		
 	})
 
+	_portfolio_controls = jQuery(".site_portfolio_controls");
+	_portfolio_controls_line = _portfolio_controls.find(".portfolio_controls_vline");
+	main_menu_link = jQuery(".main_menu_link");
+	logo_bottom_offset = main_menu_link.height() + main_menu_link.offset().top - jQuery(window).scrollTop()
+	last_control_step = _portfolio_controls.find(".portfolio_control_steps .portfolio_control_step:not(.hiddenStep)").last();
+	TweenMax.set(last_control_step,{marginBottom:0})
+	TweenMax.set(_portfolio_controls_line,{height:0})
+	TweenMax.set(_portfolio_controls,{clearProps:"all"})
+	
+	win_h = jQuery(window).height();
+	new_top = win_h/2 - _portfolio_controls.height()/2;
+	
+	if(new_top < logo_bottom_offset + 20)
+		new_top = logo_bottom_offset + 20;
+	
+	TweenMax.set(_portfolio_controls,{top:new_top})
+	
+	
+	
+	bottom_offset = last_control_step.height()/2;
+	new_h = new_top + _portfolio_controls.height() - bottom_offset - logo_bottom_offset ;
+	
+	TweenMax.set(_portfolio_controls_line,{height:new_h, marginBottom:bottom_offset})
+	
 	
 }
 
@@ -1056,6 +1117,10 @@ function site_ready_before(){
 	fadeInElements = jQuery(".sequenced_fadein")
 	TweenMax.killTweensOf(fadeInElements)
 	TweenMax.set(fadeInElements,{autoAlpha:0,scale:.7})	
+
+	fadeInElements3 = jQuery(".sequenced_fadein_noscale")
+	TweenMax.killTweensOf(fadeInElements3)
+	TweenMax.set(fadeInElements3,{autoAlpha:0})	
 	
 	bg_lights = jQuery.find(".background_light_filter_corners");
 	TweenMax.killTweensOf(bg_lights)
@@ -1068,7 +1133,11 @@ function site_ready_before(){
 secIntroFunctionQueue.push(site_secintro);
 function site_secintro(_currentsec){
 		
-		
+		if(_currentsec.find("#countdown_home").length > 0){
+			jQuery("body").addClass("hideTopCountdown")
+		}else{
+			jQuery("body").removeClass("hideTopCountdown")
+		}
 		
 		fadeInDelay = .5;
 		if(jQuery(window).width() < 1000){
@@ -1078,6 +1147,10 @@ function site_secintro(_currentsec){
 		fadeInElements = _currentsec.find(".sequenced_fadein")
 		TweenMax.killTweensOf(fadeInElements)
 		TweenMax.staggerTo(fadeInElements,.5,{delay:fadeInDelay,autoAlpha:1,scale:1,ease:Power3.easeOut,clearProps:"opacity,visibility,transform,scale"},.1)
+		
+		fadeInElements3 = _currentsec.find(".sequenced_fadein_noscale")
+		TweenMax.killTweensOf(fadeInElements3)
+		TweenMax.staggerTo(fadeInElements3,.5,{delay:fadeInDelay,autoAlpha:1,ease:Power3.easeOut,clearProps:"opacity,visibility,transform,scale"},.1)
 		
 		bg_lights = _currentsec.find(".background_light_filter_corners");
 		TweenMax.killTweensOf(bg_lights)
@@ -1202,8 +1275,23 @@ function site_secintro(_currentsec){
 		
 		}
 		
-		_currentsec.find(".l-section-video video").each(function(){
-			jQuery(this).get(0).play();
+		_currentsec.find(".l-section-video").each(function(){
+			_video = jQuery(this).find("video")
+			_source = jQuery(this).find(".video_source_dynamicload").html();
+			
+			if(_source.length > 0){
+				_video.html(_source);
+			}else{
+				_video.find("source").each(function(){
+					vid_src = jQuery(this).attr("data-src")
+					jQuery(this).attr("src", vid_src)
+				})
+			}
+			TweenMax.killTweensOf(_video)
+			TweenMax.set(_video, {clearProps:"all"})
+			TweenMax.set(_video, {autoAlpha:0})
+			TweenMax.to(_video, .5,{delay:fadeInDelay, autoAlpha:1, ease:Power1.easeOut})
+			_video.get(0).play();
 		});
 		
 		
@@ -1234,6 +1322,11 @@ function site_secintro(_currentsec){
 		}
 
 		
+		
+		
+		
+		
+		animateBgImages(_currentsec.find(".background_quote_img"), .5)
 
 		
 		_prevsec_memo = _currentsec;
@@ -1243,12 +1336,16 @@ _prevsec_memo = "";
 
 secOutFunctionQueue.push(site_secout);
 function site_secout(_prevsec){
-		if(jQuery(window).width() > 676){
+		if(jQuery(window).width() > 767){
 			fadeInElements2 = _prevsec.find(".sequenced_fadein")
 			TweenMax.killTweensOf(fadeInElements2)
 			TweenMax.staggerTo(fadeInElements2,.5,{autoAlpha:0,scale:.7,ease:Power3.easeInOut},-.05)
 			
+
 		}
+		fadeInElements3 = _prevsec.find(".sequenced_fadein_noscale")
+		TweenMax.killTweensOf(fadeInElements3)
+		TweenMax.staggerTo(fadeInElements3,.5,{autoAlpha:0,ease:Power3.easeInOut},-.05)
 		
 		
 		bg_lights = _prevsec.find(".background_light_filter_corners");
@@ -1261,12 +1358,36 @@ function site_secout(_prevsec){
 	
 		TweenMax.staggerTo(nodes_bgs, .2, {scale:.7, autoAlpha:0, ease:Power3.easeIn}, -.03)
 
-		_prevsec.find(".l-section-video video").each(function(){
-			jQuery(this).get(0).pause();
+		
+		_prevsec.find(".l-section-video").each(function(){
+			_video = jQuery(this).find("video")
+			_video.get(0).pause();
+			TweenMax.killTweensOf(_video)
+			TweenMax.to(_video, .3,{delay:.3,autoAlpha:0, ease:Power3.easeOut, onComplete:hideVideo, onCompleteParams:[_video]})
+			
 		});
 		
+		
+		
 }
+function hideVideo(_video){
+	
+	TweenMax.set(_video, {display:"none"})	
+	_source = _video.parent().find(".video_source_dynamicload");
+			
+	if(_source.length > 0){
+		_video.html("");
+	}else{
+		_video.find("source").each(function(){
+			jQuery(this).attr("src", "")
+		})
+	}
+			
+	
+	
+	
 
+}
 
 
 
@@ -1292,7 +1413,7 @@ function setRoadmap(){
 		},
 		swipeRight:function(event, direction, distance, duration, fingerCount) {
 			roadMapAnimToNext(-1);
-		}
+		}, allowPageScroll:"vertical"
 	});
 	
 }
@@ -1329,7 +1450,10 @@ function roadMapAnimTo(index){
 			_roadmap_item_to = _roadmap_items.eq(0);
 		}
 		
-		if(index >= 2){
+		if(
+		index >= 2
+		|| (index >= 1 && jQuery(window).width() < 768)
+		){
 			_roadmap_block.addClass("hide_roadmap_title")
 		}else{
 			_roadmap_block.removeClass("hide_roadmap_title")
@@ -1457,6 +1581,9 @@ function setTeam(){
 	
 	background_team_imgs = jQuery(".background_team_imgs")
 	background_team_imgs.html("")
+	background_team_imgs_over = jQuery(".background_team_imgs_over")
+	background_team_imgs_over.html("")
+	
 	team_control_dots = jQuery("ul.team_control_dots")
 	team_control_dots.html("")
 	team_items.each(function(index){
@@ -1464,10 +1591,20 @@ function setTeam(){
 									<div class="menu_dot_item"></div>\
 								</li>')
 		bg_team_img = jQuery("<div class='background_team_img'></div>")
+		
 		TweenMax.set(bg_team_img, {autoAlpha:0,backgroundImage: 'url('+jQuery(this).find(".ref_img").attr("src")+')'})
 		bg_team_img.attr("data_index",index)
 		bg_team_img.addClass("background_team_img_"+index)
+
+		
+		bg_team_img_over = jQuery("<div class='background_team_img background_team_img_over'></div>")
+		TweenMax.set(bg_team_img_over, {autoAlpha:0,backgroundImage: 'url('+jQuery(this).find(".ref_img").attr("src_over")+')'})
+		bg_team_img_over.attr("data_index",index)
+		bg_team_img_over.addClass("background_team_img_"+index)
+		
+	
 		background_team_imgs.append(bg_team_img)
+		background_team_imgs_over.append(bg_team_img_over)
 	})
 	
 	jQuery(".team_control_dot").click(function(){
@@ -1480,7 +1617,7 @@ function setTeam(){
 		},
 		swipeRight:function(event, direction, distance, duration, fingerCount) {
 			teamOpenNext(-1);
-		}
+		},allowPageScroll:"vertical"
 	});
 	teamOpen(0, 1)
 
@@ -1499,16 +1636,24 @@ function teamOpen(_index, direction){
 	bg_images = jQuery(".background_team_imgs .background_team_img")
 	_prev_bg_image = bg_images.eq(_current_memeber_index);
 	_next_bg_image = bg_images.eq(_index);
+	
+	bg_images_o = jQuery(".background_team_imgs_over .background_team_img_over")
+	_prev_bg_image_o = bg_images_o.eq(_current_memeber_index);
+	_next_bg_image_o = bg_images_o.eq(_index);
+	
 	console.log("_next_bg_image "+_next_bg_image.length)
 	if(_prev_bg_image.length > 0){
 		TweenMax.killTweensOf(_prev_bg_image)
 		if(direction == 1) newleft = 0; else newleft = 100;
 		TweenMax.to(_prev_bg_image, 1, {width:0, left:newleft+"%",ease:Power3.easeInOut})
+		TweenMax.to(_prev_bg_image_o, 1, {width:0, left:newleft+"%",ease:Power3.easeInOut})
 	}
 	TweenMax.killTweensOf(_next_bg_image)
 	if(direction == 1) newleft = 100; else newleft = 0;
 	TweenMax.set(_next_bg_image, {width:0, left:newleft+"%", autoAlpha:0})
 	TweenMax.to(_next_bg_image, 1, {width:"100%", left:0, autoAlpha:1,ease:Power3.easeInOut})
+	TweenMax.set(_next_bg_image_o, {width:0, left:newleft+"%", autoAlpha:0})
+	TweenMax.to(_next_bg_image_o, 1, {width:"100%", left:0, autoAlpha:1,ease:Power3.easeInOut})
 	
 	
 	
@@ -1526,6 +1671,23 @@ function teamOpen(_index, direction){
 	_current_memeber.addClass("current_team")
 	
 
+	
+	_currentsec = fullScreenSections.eq(currentSection);
+	delay_first = 0
+	teamsquare_lines1 = _currentsec.find(".team_head_frame_line_v .line_color_fill");
+	TweenMax.killTweensOf(teamsquare_lines1)
+	TweenMax.staggerTo(teamsquare_lines1, .1, {delay:delay_first+.075, height:0, ease:Linear.easeNone}, -.15)
+	
+	teamsquare_lines2 = _currentsec.find(".team_head_frame_line_h .line_color_fill");
+	TweenMax.killTweensOf(teamsquare_lines2)
+	TweenMax.staggerTo(teamsquare_lines2, .1, {delay:delay_first, width:0, ease:Linear.easeNone}, -.15)
+	
+	delay_first = .8;
+	
+	TweenMax.staggerTo(teamsquare_lines1, .3, {delay:delay_first, height:"100%", ease:Power2.easeInOut, clearProps:"all"}, .6)
+	
+	TweenMax.staggerTo(teamsquare_lines2, .3, {delay:delay_first+.3, width:"100%", ease:Power2.easeInOut, clearProps:"all"}, .6)
+	
 	
 	
 	updateTeamControlDots()
