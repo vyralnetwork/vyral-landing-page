@@ -31,6 +31,7 @@
 	<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js?ver=1.0.0'></script>
 	<script type='text/javascript' src='lib/jquery.touchSwipe.min.js'></script>
 	<script type='text/javascript' src='lib/jquery.mousewheel.min.js'></script>
+	<script type='text/javascript' src='lib/modernizr-videoautoplay.js'></script>
 	<script type="text/javascript" src="js/main.js"></script>
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -605,7 +606,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 			<section  nav_name="What is Vyral" class="l-section wpb_row height_full valign_center with_video">
 				<div class="l-section-video">
-					<video muted loop autoplay preload="auto" webkit-playsinline="true" playsinline="true" poster="videos/vid_3.jpg">
+					<div class="video_placeholder" style="background-image:url('videos/vid_3.jpg');" ></div>
+					<div class="video_fallback" data_video-fallback="videos/vid_3.gif" ></div>
+					
+					<video muted loop autoplay preload="auto" webkit-playsinline="true" playsinline="true" >
 						
 					</video>
 					<div class="video_source_dynamicload">
@@ -798,7 +802,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 								<div class="nodes_textbox_decoline nodes_textbox_decoline_v nodes_textbox_decoline_right"><div class="line_color_fill" ></div></div>
 								<div class="nodes_textbox_decoline nodes_textbox_decoline_h nodes_textbox_decoline_bottom"><div class="line_color_fill" ></div></div>
 								<div class="nodes_textbox_content">
-									<p>Refer someone to the Vyral token sale via the first ever decentralized reward system & earn up to <strong>33%</strong> of the resulting contribution in SHARE tokens.</p>
+									<p>Refer someone via the first ever decentralized reward system & earn up to <strong>33%</strong> of the resulting contribution in SHARE tokens.</p>
 								</div>
 							</div>
 							</div>
@@ -811,7 +815,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			
 			<section nav_name="Tokens" class="l-section wpb_row height_full valign_center with_video">
 				<div class="l-section-video">
-					<video muted loop autoplay preload="auto" webkit-playsinline="true" playsinline="true" poster="videos/vid_2.jpg">
+					<div class="video_placeholder" style="background-image:url('videos/vid_2.jpg');" ></div>
+					<div class="video_fallback" data_video-fallback="videos/vid_2.gif" ></div>
+					
+					<video muted loop autoplay preload="auto" webkit-playsinline="true" playsinline="true" >
 					</video>
 					<div class="video_source_dynamicload">
 						<source type="video/webm" src="videos/vid_2_720.webm"  media="all and (max-width: 1440px)" />
@@ -961,7 +968,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 											</div>
 										</div>
 										<div class="token_item_copy sequenced_fadein">
-											<h4>Share Token Seeeding</h4>
+											<h4>Share Token Seeding</h4>
 											<p>SHARE Tokens seed Vyral token sales as token sales opt for community rewards in SHARE.</p>
 										</div>
 									</div>
@@ -1002,7 +1009,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			
 			<section nav_name="Road Map" class="l-section wpb_row height_full width_full valign_center with_video">
 				<div class="l-section-video">
-					<video muted loop autoplay preload="auto" webkit-playsinline="true" playsinline="true"  poster="videos/vid_1.jpg">
+					<div class="video_placeholder" style="background-image:url('videos/vid_1.jpg');" ></div>
+					<div class="video_fallback" data_video-fallback="videos/vid_1.gif" ></div>
+					
+					<video muted loop autoplay preload="auto" webkit-playsinline="true" playsinline="true"  >
 					</video>
 					<div class="video_source_dynamicload">
 						<source type="video/webm" src="videos/vid_1_720.webm" media="all and (max-width: 1440px)" />
@@ -1122,7 +1132,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 												</div>
 											</div>
 											<div class="roadmap_copy">
-												<p>Vyral Token Sale as the first implementation of Vyral technology</p>
+												<p>First live implementation of Vyral technology</p>
 											</div>
 											<div class="roadmap_lines">
 												<div class="roadmap_vline-h">
@@ -1479,7 +1489,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				</div></div></div></div></div>
 			</section>
 
-			
+			<!--
 			<section nav_name="Contribution Period" class="l-section wpb_row height_full valign_center ">
 				<div class="background_block">
 					
@@ -1712,7 +1722,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 				</div></div></div></div></div>
 			</section>
-
+			-->
 			
 			<!-- Quote: The future of peer-to-peer social campaigns... -->
 			<section data_name="" class="l-section wpb_row height_full valign_center section_quote">
@@ -1777,16 +1787,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 							<li>
 								<div class="team_item">
 									<div class="team_item_content">
-										<h5>Digital Strategies Limited</h5>
-										<h6>Founding Manager</h6>
-										<p>Pioneers in structuring token sales; created smart contracts for debt-like instruments on the blockchain via their contributions to the ChronoLogic project</p>
-									</div>
-									<img class="ref_img person_img" src="images/team/digistrats_purple.jpg" src_over="" />
-								</div>
-							</li>
-							<li>
-								<div class="team_item">
-									<div class="team_item_content">
 										<h5>Vijay Kandy</h5>
 										<h6>Blockchain developer</h6>
 										<p>Blockchain developer with expertise in decentralized systems and consensus algorithms. Co-founder of an IoT based blockchain startup.</p>
@@ -1808,8 +1808,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 								<div class="team_item">
 									<div class="team_item_content">
 										<h5>Kelsen Andrade</h5>
-										<h6></h6>
-										<p></p>
+										<h6>Blockchain Ambassador</h6>
+										<p>Accounting, Finance and Tax specialist. Blockchain Ambassador and Entrepreneur</p>
 									</div>
 									<img class="ref_img person_img" src="images/team/Kelsen_Andrade_purple.jpg" src_over="images/team/Kelsen_Andrade_purple.png" />
 								</div>
@@ -1822,6 +1822,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 										<p>Lawyer, Vice Consul Diplomat of Brazil, Cryptocurrency Evangelist - Blockchain Legal & Compliance</p>
 									</div>
 									<img class="ref_img person_img" src="images/team/Paulo_Dallagnol_purple.jpg" src_over="images/team/Paulo_Dallagnol_purple.png" />
+								</div>
+							</li>
+							<li>
+								<div class="team_item">
+									<div class="team_item_content">
+										<h5>Neil Patel</h5>
+										<h6>Advisor</h6>
+										<p>Co-founder of Crazy Egg, Hello Bar and KISSmetrics. He helps companies like Amazon, NBC, GM, HP and Viacom grow their revenue.</p>
+									</div>
+									<img class="ref_img person_img" src="images/team/neil_patel_purple.jpg" src_over="images/team/neil_patel_purple.png" />
+								</div>
+							</li>
+							<li>
+								<div class="team_item">
+									<div class="team_item_content">
+										<h5>Digital Strategies Limited</h5>
+										<h6>Advisor</h6>
+										<p>Pioneers in structuring token sales; created smart contracts for debt-like instruments on the blockchain via their contributions to the ChronoLogic project</p>
+									</div>
+									<img class="ref_img person_img" src="images/team/digistrats_purple.jpg" src_over="" />
 								</div>
 							</li>
 						</ul>

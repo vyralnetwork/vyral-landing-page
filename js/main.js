@@ -17,6 +17,18 @@ var waitForFinalEvent = (function () {
 
 readyBeforeDefinitions = [];
 jQuery(document).ready(function(){
+	Modernizr.on('videoautoplay', function(result) {
+	  if (result) {
+		// supported
+	  } else {
+		// not-supported
+		jQuery(".video_fallback").each(function(){
+			jQuery(this).css("background-image", "url('"+jQuery(this).attr("data_video-fallback")+"')")			
+		})
+	  }
+	});
+})
+jQuery(document).ready(function(){
 
 	for(i = 0; i<readyBeforeDefinitions.length;i++){
 		(readyBeforeDefinitions[i])();

@@ -816,6 +816,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66ed385e', e
 
 #vyral_logo_svg_loading{
 	max-width:270px;
+	width:80%;
 }
 
 
@@ -2243,6 +2244,25 @@ top countdown
 	top:8px;
 }
 
+
+
+
+
+.video_fallback ,
+.video_placeholder {
+	width:100%;
+	height:100%;
+	position:absolute;
+	left:0;
+	top:0;
+	background-size:cover;
+	background-position:center center;
+	background-repeat:no-repeat;
+}
+.video_fallback{
+	display:none;
+}
+
 @media (max-width: 767px) {
 	.top_side_nav,
 	.share_button_block,
@@ -2879,6 +2899,12 @@ top countdown
 	}
 	.share_button_block:hover ul.social_icons li {
 		margin: 15px 0;
+	}
+	.no-videoautoplay .l-section-video video {
+		display: none;
+	}
+	.no-videoautoplay .l-section-video .video_fallback{
+		display:block;
 	}
 
 }
