@@ -378,6 +378,7 @@ function doGlitch(){
 
 
 var tl_start = new TimelineMax();
+var tl_playbutton = new TimelineMax();
 function setStartAppear(){
 		
 		vyral_logo = jQuery(".vyral_logo")
@@ -411,6 +412,22 @@ function setStartAppear(){
 		
 		
 		tl_start.play(0)
+		
+		play_button = ".play_button_holder"
+		play_button_bg = ".play_button_holder .block_button_bg"
+		tl_playbutton = new TimelineMax({
+				onComplete:function(){
+					this.play(0)
+				}
+			});
+			
+		tl_playbutton.set(play_button,{clearProps:"all"})
+			.set(play_button,{position:"relative"})
+			.to(play_button,1,{rotationX:360, scale:1.2, delay:2, ease:Back.easeOut})
+			.to(play_button,.5,{scale:1, ease:Power3.easeInOut})
+			.to(play_button,.1,{delay:1})
+
+		tl_playbutton.play(0)
 }
 
 
@@ -901,7 +918,9 @@ function unlockScroll(){
 }
 function unlockScroll_fn(){
 	secScrollIsAnim = 0;
-	
+	if(fullScreenSections.eq(currentSection).attr("id") != "" && typeof(fullScreenSections.eq(currentSection).attr("id")) == "string"){
+		window.location.hash = fullScreenSections.eq(currentSection).attr("id");
+	}
 }
 
 function updateFullscreenSections(){
@@ -953,6 +972,8 @@ function setCurrentSec_num(new_sec){
 		}
 		updateControls();
 		animateSecIntro();
+
+		
 	}
 }
 
@@ -994,7 +1015,7 @@ function animToSection_delay(index){
     }, 10, "animToSection");
 }
 function animToSection(index){
-	console.log("animToSection:"+index)
+	//console.log("animToSection:"+index)
 	if(secScrollIsAnim != 1){
 		
 		setCurrentSec_num(index)
@@ -1581,10 +1602,10 @@ jQuery(document).ready(function(){
 })
 _current_memeber_index = -1;
 function setTeam(){
-	jQuery(".team_controls .arrowcontrol_right").click(function(){
+	jQuery(".team_controls .arrowcontrol_holder_right").click(function(){
 		teamOpenNext(1);
 	})
-	jQuery(".team_controls .arrowcontrol_left").click(function(){
+	jQuery(".team_controls .arrowcontrol_holder_left").click(function(){
 		teamOpenNext(-1);
 	})
 	team_items = jQuery("ul.team_list li")
@@ -1595,6 +1616,8 @@ function setTeam(){
 	background_team_imgs.html("")
 	background_team_imgs_over = jQuery(".background_team_imgs_over")
 	background_team_imgs_over.html("")
+	background_team_imgs_trans = jQuery(".background_team_imgs_transparent")
+	background_team_imgs_trans.html("")
 	
 	team_control_dots = jQuery("ul.team_control_dots")
 	team_control_dots.html("")
@@ -1614,9 +1637,16 @@ function setTeam(){
 		bg_team_img_over.attr("data_index",index)
 		bg_team_img_over.addClass("background_team_img_"+index)
 		
+		
+		bg_team_img_trans = jQuery("<div class='background_team_img_transparent'></div>")
+		TweenMax.set(bg_team_img_trans, {autoAlpha:0,left:"100%",backgroundImage: 'url('+jQuery(this).find(".ref_img").attr("src_transparent")+')'})
+		bg_team_img_trans.attr("data_index",index)
+		//bg_team_img_trans.addClass("background_team_img_"+index)
+		
 	
 		background_team_imgs.append(bg_team_img)
 		background_team_imgs_over.append(bg_team_img_over)
+		background_team_imgs_trans.append(bg_team_img_trans)
 	})
 	
 	jQuery(".team_control_dot").click(function(){
@@ -1669,6 +1699,63 @@ function teamOpen(_index, direction){
 	
 	
 	
+	bg_images_trans = jQuery(".background_team_imgs_transparent .background_team_img_transparent")
+	_prev_bg_image_trans = bg_images_trans.eq(_current_memeber_index);
+	_next_bg_image_trans = bg_images_trans.eq(_index);
+	_prev_future_trans = jQuery(".background_team_imgs_transparent .background_team_img_transparent.current_future")
+	bg_images_trans.removeClass("current_future")
+	
+	if(_index+1 >= bg_images_trans.length) _futurenext_bg_image_trans = bg_images_trans.eq(0);
+	else _futurenext_bg_image_trans = bg_images_trans.eq(_index+1);
+	
+	_futurenext_bg_image_trans.addClass("current_future")
+	
+	
+	TweenMax.killTweensOf(bg_images_trans)
+	TweenMax.set(bg_images_trans, {clearProps:"opacity,visibility,left,scale,transform"})
+	TweenMax.set(bg_images_trans, {autoAlpha:0})
+	
+	if(
+		Math.abs( _current_memeber_index - _index ) == 1 //when moving one by one
+		||  (direction == 1 && _index == 0 && _current_memeber_index == bg_images_trans.length-1) //from first to last
+		||	(direction == -1 && _index == bg_images_trans.length-1 && _current_memeber_index == 0) //from last to first
+		||  (direction == 1 && _index == _current_memeber_index ) //when section anim opens
+	){
+		if(direction == 1){
+			//TweenMax.killTweensOf(_next_bg_image_trans)
+			TweenMax.set(_next_bg_image_trans, {clearProps:"opacity,visibility,left,scale,transform"})
+			TweenMax.to(_next_bg_image_trans,1, {autoAlpha:0,left:0, ease:Power3.easeInOut})
+			TweenMax.to(_next_bg_image_trans,1, {scale:1, ease:Power3.easeOut})
+			
+			//TweenMax.killTweensOf(_futurenext_bg_image_trans)
+			TweenMax.set(_futurenext_bg_image_trans, {clearProps:"opacity,visibility,left,scale,transform"})
+			TweenMax.from(_futurenext_bg_image_trans,1, {autoAlpha:0,left:"100%",ease:Power3.easeInOut})
+			
+		}else{
+			
+			//TweenMax.killTweensOf(_prev_future_trans)
+			TweenMax.set(_prev_future_trans, {clearProps:"opacity,visibility,left,scale,transform"})
+			TweenMax.to(_prev_future_trans, 1,{left:"100%",ease:Power3.easeInOut})
+		
+			//TweenMax.killTweensOf(_futurenext_bg_image_trans)
+			TweenMax.set(_futurenext_bg_image_trans, {clearProps:"opacity,visibility,left,scale,transform"})
+			TweenMax.from(_futurenext_bg_image_trans,1, {autoAlpha:0,left:0, ease:Power3.easeInOut})
+			TweenMax.from(_futurenext_bg_image_trans,.5, {delay:.5,scale:1,ease:Power3.easeInOut})
+			
+		}
+	}else{ //when moving from any team member to any other (not step by step)
+			//TweenMax.killTweensOf(_prev_future_trans)
+			TweenMax.set(_prev_future_trans, {clearProps:"opacity,visibility,left,scale,transform"})
+			TweenMax.to(_prev_future_trans, 1,{left:"100%",ease:Power3.easeInOut})
+			
+			//TweenMax.killTweensOf(_futurenext_bg_image_trans)
+			TweenMax.set(_futurenext_bg_image_trans, {clearProps:"opacity,visibility,left,scale,transform"})
+			TweenMax.from(_futurenext_bg_image_trans,1, {autoAlpha:0,left:"100%",ease:Power3.easeInOut})
+	}
+	
+	
+	
+	
 	TweenMax.set(_prev_member, {autoAlpha:0, position:"absolute",left:-100*direction+"px",scale:.9,rotationY:-30*direction, top:0})
 	TweenMax.from(_prev_member,.3, {autoAlpha:1,left:0,scale:1,rotationY:0, ease:Power3.easeOut})
 	
@@ -1683,6 +1770,7 @@ function teamOpen(_index, direction){
 	_current_memeber.addClass("current_team")
 	
 
+	
 	
 	_currentsec = fullScreenSections.eq(currentSection);
 	delay_first = 0

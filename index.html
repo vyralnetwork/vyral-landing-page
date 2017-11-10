@@ -157,7 +157,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		<script src="//static.leadpages.net/leadboxes/current/embed.js" async defer></script>
 		<div class="w-btn-wrapper align_left"><a class="join_our_list w-btn style_outlined color_primary icon_none" href="" data-leadbox-popup="142585bb3f72a2:11a7ac50eb46dc" data-leadbox-domain="leadseven.lpusercontent.com"><span class="w-btn-label">Join our list</span></a></div>
 	</div>
-	<div class="share_button_block">
+	<div class="share_button_block show_on_mobile">
 
 		<div class="share_button block_button">
 			<div class="button_hit_area"></div>
@@ -167,6 +167,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 		<ul class="social_icons">
 			<div class="social_hit_area"></div>
+			<!--
 			<li>
 				<a href="https://vyral.network/comingsoon.html" target="_blank" class="block_button social_button">
 					<div class="button_hit_area"></div>
@@ -188,6 +189,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 					<div class="block_button_icon"><i class="fa fa-instagram" ></i></div>
 				</a>
 			</li>
+			-->
 			<li>
 				<a href="https://github.com/vyralnetwork" target="_blank" target="_blank" class="block_button social_button">
 					<div class="button_hit_area"></div>
@@ -196,13 +198,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				</a>
 			</li>
 			<li>
-				<a href="https://vyral.network/slack" target="_blank" target="_blank" class="block_button social_button">
+				<a href="https://vyral.network/telegram" target="_blank" target="_blank" class="block_button social_button">
 					<div class="button_hit_area"></div>
 					<div class="block_button_bg"></div>
-					<div class="block_button_icon"><i class="fa fa-slack" ></i></div>
+					<div class="block_button_icon"><i class="fa fa-telegram" ></i></div>
 				</a>
 			</li>
-			<li class="show_on_mobile" >
+			<li class="" >
 				<a href="https://vyral.network/teaser" target="_blank" target="_blank" class="block_button social_button">
 					<div class="button_hit_area"></div>
 					<div class="block_button_bg"></div>
@@ -220,7 +222,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 						</span></div>
 				</a>
 			</li>
-			<li class="show_on_mobile" >
+			<li class="" >
 				<a href="https://vyral.network/paper" target="_blank" target="_blank" class="block_button social_button">
 					<div class="button_hit_area"></div>
 					<div class="block_button_bg"></div>
@@ -243,7 +245,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 						</span></div>
 				</a>
 			</li>
-			<li class="show_on_mobile" >
+			<li class="" >
 				<a href="https://blog.vyral.network" target="_blank" target="_blank" class="block_button social_button">
 					<div class="button_hit_area"></div>
 					<div class="block_button_bg"></div>
@@ -345,6 +347,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				</li>
 				<li class="extra_link-item">
 					
+					<a href="https://github.com/vyralnetwork" target="_blank" >
+						<div class="extra_link_bg"></div>
+						<span class="extra_link-icon">
+							<div class="block_button_icon"><i class="fa fa-github-alt" ></i></div>
+						</span>
+						<span class="extra_link-label">Github</span>
+					</a>
+				</li>
+				<li class="extra_link-item">
+					
+					<a href="https://vyral.network/telegram" target="_blank" >
+						<div class="extra_link_bg"></div>
+						<span class="extra_link-icon">
+							<div class="block_button_icon"><i class="fa fa-telegram" ></i></div>
+						</span>
+						<span class="extra_link-label">Telegram</span>
+					</a>
+				</li>
+				<!--
+				<li class="extra_link-item">
+					
 					<a href="https://vyral.network/slack" target="_blank">
 						<div class="extra_link_bg"></div>
 						<span class="extra_link-icon">
@@ -370,6 +393,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 						<span class="extra_link-label">Slack</span>
 					</a>
 				</li>
+				-->
 			</ul>
 	</div>
 	
@@ -397,6 +421,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 	<div class="site_portfolio_controls" id="site_portfolio_controls">
 		<div class="site_portfolio_controls_holder" >
+			<div class="portfolio_controls_hitarea"></div>
 			<div class="portfolio_controls_vline"></div>
 			<a title="Previous Content" href="#prev_content" class="ts_workslide_controll portfolio_control_arrow portfolio_control_arrow_up"><i class="fa fa-angle-up"></i><div class="bg_lines"></div></a>
 			<div class="portfolio_control_steps" id="portfolio_control_steps">
@@ -407,7 +432,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			<div id="portfolio_control_step_clone" style="display:none;">
 				<div class="portfolio_control_step" section_index="%section_index%" >
 					<div class="portfolio_control_step_icon"><div class="menu_dot_item"></div></div>
-					<div class="portfolio_control_step_label">%name%</div>								
+					<div class="portfolio_control_step_label"><div class="portfolio_control_step_label_hitarea"></div>%name%</div>								
 					
 				</div>
 			</div>
@@ -450,7 +475,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 		<main class="l-content" itemprop="mainContentOfPage">
 
-			<section nav_name="Home" class="l-section wpb_row height_full width_full_ valign_center">
+			<section nav_name="Home" id="home" class="l-section wpb_row height_full width_full_ valign_center">
 				<div class="background_block home_background_block">
 					<div class="home_background_images">
 						<div class="home_background_image home_background_image_1">
@@ -557,9 +582,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 									</p>
 								</div>
 								<div class="play_button_block">
-									<div class="play_button block_button">
-										<div class="block_button_bg"></div>
-										<div class="block_button_icon"><i class="fa fa-play" ></i></div>
+									<div class="play_button_holder">
+										<div class="play_button block_button">
+											<div class="block_button_bg"></div>
+											<div class="block_button_icon"><i class="fa fa-play" ></i></div>
+										</div>
 									</div>
 									<p class="play_button_label">Play Video</p>
 								</div>
@@ -586,9 +613,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 								</div>
 							</div>
 							<div class="play_button_block">
-								<div class="play_button block_button">
-									<div class="block_button_bg"></div>
-									<div class="block_button_icon"><i class="fa fa-play" ></i></div>
+								<div class="play_button_holder">
+									<div class="play_button block_button">
+										<div class="block_button_bg"></div>
+										<div class="block_button_icon"><i class="fa fa-play" ></i></div>
+									</div>
 								</div>
 								<p class="play_button_label">Play Video</p>
 							</div>
@@ -601,10 +630,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 				</div></div></div></div></div>
+				
+				<div class="cursor_scroll">
+					<div class="scroll-downs">
+					  <div class="mousey">
+						<div class="scroller"></div>
+					  </div>
+					</div>
+				</div>
 			</section>
 
 
-			<section  nav_name="What is Vyral" class="l-section wpb_row height_full valign_center with_video">
+			<section  nav_name="What is Vyral" id="what_is_vyral" class="l-section wpb_row height_full valign_center with_video">
 				<div class="l-section-video">
 					<div class="video_placeholder" style="background-image:url('videos/vid_3.jpg');" ></div>
 					<div class="video_fallback" data_video-fallback="videos/vid_3.gif" ></div>
@@ -658,7 +695,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			</section>
 	
 
-			<section  nav_name="Vyral Nodes" class="l-section wpb_row height_full width_full valign_center ">
+			<section  nav_name="Vyral Nodes" id="vyral_nodes" class="l-section wpb_row height_full width_full valign_center ">
 				<div class="background_block">
 					
 				</div>
@@ -710,7 +747,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			</section>
 
 
-			<section  nav_name="Share Rewards" class="l-section wpb_row height_full width_full valign_center ">
+			<section  nav_name="Share Rewards" id="share_rewards" class="l-section wpb_row height_full width_full valign_center ">
 				<div class="background_block">
 					
 				</div>
@@ -813,7 +850,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			</section>
 
 			
-			<section nav_name="Tokens" class="l-section wpb_row height_full valign_center with_video">
+			<section nav_name="Tokens" id="tokens" class="l-section wpb_row height_full valign_center with_video">
 				<div class="l-section-video">
 					<div class="video_placeholder" style="background-image:url('videos/vid_2.jpg');" ></div>
 					<div class="video_fallback" data_video-fallback="videos/vid_2.gif" ></div>
@@ -1007,7 +1044,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			</section>
 			
 			
-			<section nav_name="Road Map" class="l-section wpb_row height_full width_full valign_center with_video">
+			<section nav_name="Road Map" id="road_map" class="l-section wpb_row height_full width_full valign_center with_video">
 				<div class="l-section-video">
 					<div class="video_placeholder" style="background-image:url('videos/vid_1.jpg');" ></div>
 					<div class="video_fallback" data_video-fallback="videos/vid_1.gif" ></div>
@@ -1276,7 +1313,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			</section>
 
 
-			<section nav_name="Distribution" class="l-section wpb_row height_full valign_center ">
+			<section nav_name="Distribution" id="distribution" class="l-section wpb_row height_full valign_center ">
 				<div class="background_block">
 					
 				</div>
@@ -1490,7 +1527,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			</section>
 
 			<!--
-			<section nav_name="Contribution Period" class="l-section wpb_row height_full valign_center ">
+			<section nav_name="Contribution Period" id="contribution" class="l-section wpb_row height_full valign_center ">
 				<div class="background_block">
 					
 				</div>
@@ -1747,11 +1784,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			</section>
 			
 
-			<section nav_name="Team" class="l-section wpb_row height_full width_full valign_center ">
+			<section nav_name="Team" id="team" class="l-section wpb_row height_full width_full valign_center ">
 				<div class="background_block background_team">
 				
 					<div class="background_team_imgs" >
 						<div class="background_team_img" ></div>
+					</div>
+					<div class="background_team_imgs_transparent" >
+						<div class="background_team_img_transparent" ></div>
 					</div>
 					
 					<div class="team_head_frame-h" >
@@ -1781,7 +1821,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 										<h6>Serial SaaS</h6>
 										<p>Entrepreneur that has developed & launched multiple award winning applications with cutting edge technology; Crypto private equity investor & marketing advisor to Chronologic</p>
 									</div>
-									<img class="ref_img person_img" src="images/team/Lee_Pennington_purple.jpg"  src_over="images/team/Lee_Pennington_purple.png" />
+									<img class="ref_img person_img" src="images/team/Lee_Pennington_purple.jpg"  src_over="images/team/Lee_Pennington_purple.png"  src_transparent="images/team/Lee_Pennington_transparent.png"/>
 								</div>
 							</li>
 							<li>
@@ -1791,7 +1831,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 										<h6>Blockchain developer</h6>
 										<p>Blockchain developer with expertise in decentralized systems and consensus algorithms. Co-founder of an IoT based blockchain startup.</p>
 									</div>
-									<img class="ref_img person_img" src="images/team/Vijay_kandy_purple.jpg" src_over="images/team/Vijay_kandy_purple.png" />
+									<img class="ref_img person_img" src="images/team/Vijay_kandy_purple.jpg" src_over="images/team/Vijay_kandy_purple.png"  src_transparent="images/team/Vijay_kandy_transparent.png"/>
 								</div>
 							</li>
 							<li>
@@ -1801,7 +1841,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 										<h6>Leading communications</h6>
 										<p>Co-founder of one of the largest cryptonews websites in Brazil, BTCSoul.com and crypto enthusiast.</p>
 									</div>
-									<img class="ref_img person_img" src="images/team/Thiago_Oliveira_purple.jpg" src_over="images/team/Thiago_Oliveira_purple.png" />
+									<img class="ref_img person_img" src="images/team/Thiago_Oliveira_purple.jpg" src_over="images/team/Thiago_Oliveira_purple.png"  src_transparent="images/team/Thiago_Oliveira_transparent.png"/>
 								</div>
 							</li>
 							<li>
@@ -1811,7 +1851,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 										<h6>Blockchain Ambassador</h6>
 										<p>Accounting, Finance and Tax specialist. Blockchain Ambassador and Entrepreneur</p>
 									</div>
-									<img class="ref_img person_img" src="images/team/Kelsen_Andrade_purple.jpg" src_over="images/team/Kelsen_Andrade_purple.png" />
+									<img class="ref_img person_img" src="images/team/Kelsen_Andrade_purple.jpg" src_over="images/team/Kelsen_Andrade_purple.png"  src_transparent="images/team/Kelsen_Andrade_transparent.png"/>
 								</div>
 							</li>
 							<li>
@@ -1821,7 +1861,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 										<h6>Cryptocurrency Evangelist</h6>
 										<p>Lawyer, Vice Consul Diplomat of Brazil, Cryptocurrency Evangelist - Blockchain Legal & Compliance</p>
 									</div>
-									<img class="ref_img person_img" src="images/team/Paulo_Dallagnol_purple.jpg" src_over="images/team/Paulo_Dallagnol_purple.png" />
+									<img class="ref_img person_img" src="images/team/Paulo_Dallagnol_purple.jpg" src_over="images/team/Paulo_Dallagnol_purple.png"  src_transparent="images/team/Paulo_Dallagnol_transparent.png" />
 								</div>
 							</li>
 							<li>
@@ -1831,7 +1871,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 										<h6>Advisor</h6>
 										<p>Co-founder of Crazy Egg, Hello Bar and KISSmetrics. He helps companies like Amazon, NBC, GM, HP and Viacom grow their revenue.</p>
 									</div>
-									<img class="ref_img person_img" src="images/team/neil_patel_purple.jpg" src_over="images/team/neil_patel_purple.png" />
+									<img class="ref_img person_img" src="images/team/neil_patel_purple.jpg" src_over="images/team/neil_patel_purple.png" src_transparent="images/team/neil_patel_transparent.png" />
 								</div>
 							</li>
 							<li>
@@ -1841,22 +1881,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 										<h6>Advisor</h6>
 										<p>Pioneers in structuring token sales; created smart contracts for debt-like instruments on the blockchain via their contributions to the ChronoLogic project</p>
 									</div>
-									<img class="ref_img person_img" src="images/team/digistrats_purple.jpg" src_over="" />
+									<img class="ref_img person_img" src="images/team/digistrats_purple.jpg" src_over=""  src_transparent=""/>
 								</div>
 							</li>
 						</ul>
 						</div>
 						<div class="team_controls sequenced_fadein">
 						
-							<div class="arrowcontrol arrowcontrol_right"><div class="arrowcontrol_arrow" ></div></div>
+							<div class="arrowcontrol_holder arrowcontrol_holder_right">
+								<div class="arrowcontrol arrowcontrol_right"><div class="arrowcontrol_arrow" ></div></div>
+								<div class="arrowcontrol_label" >Next</div>
+							</div>
+							<div class="arrowcontrol_holder arrowcontrol_holder_left">
+							<div class="arrowcontrol arrowcontrol_left"><div class="arrowcontrol_arrow" ></div></div>
+							</div>
+						</div>
+						
+						<div class="team_controls_bottom">
 							<ul class="team_control_dots" >
 								<li class="team_control_dot current_item" >
 									<div class="menu_dot_item"></div>
 								</li>
 							</ul>
-							
-							<div class="arrowcontrol arrowcontrol_left"><div class="arrowcontrol_arrow" ></div></div>
-						
 						</div>
 					</div>
 
