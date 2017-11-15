@@ -26,6 +26,11 @@
 			root.className += " no-touch";
 		}
 	</script>
+	<script>
+		//This will overwrite default time set on main.js
+		//Coordinated with GMT Universal, which is 4 hours ahead NYC, so 15h GMT is 11am NYC
+		var countDownDate = "December 1, 2017 15:00:00";
+	</script>
 	<script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script type='text/javascript' src="lib/jquery-migrate.min.js"></script>
 	<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js?ver=1.0.0'></script>
@@ -155,7 +160,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 	-->
 	<div id="top_side_nav" class="top_side_nav">
 		<script src="//static.leadpages.net/leadboxes/current/embed.js" async defer></script>
-		<div class="w-btn-wrapper align_left"><a class="join_our_list w-btn style_outlined color_primary icon_none" href="" data-leadbox-popup="142585bb3f72a2:11a7ac50eb46dc" data-leadbox-domain="leadseven.lpusercontent.com"><span class="w-btn-label">Join our list</span></a></div>
+		<div class="w-btn-wrapper align_left"><a class="join_our_list w-btn style_solid color_primary icon_none" href="" data-leadbox-popup="142585bb3f72a2:11a7ac50eb46dc" data-leadbox-domain="leadseven.lpusercontent.com"><span class="w-btn-label">Join our list</span></a></div>
 	</div>
 	<div class="share_button_block show_on_mobile">
 
@@ -594,6 +599,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 						</div>
 						<div class="column_content_middle sequenced_fadein">
+						<!--
 							<div class="countdown" id="countdown_home">
 								<div class="countdown_date_item countdown_date_item_days">
 									<div class="date_item_value" id="value_days">0</div>
@@ -612,6 +618,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 									<div class="date_item_label">Sec</div>
 								</div>
 							</div>
+						-->
 							<div class="play_button_block">
 								<div class="play_button_holder">
 									<div class="play_button block_button">
@@ -643,6 +650,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 			<section  nav_name="What is Vyral" id="what_is_vyral" class="l-section wpb_row height_full valign_center with_video">
 				<div class="l-section-video">
+					<!--
 					<div class="video_placeholder" style="background-image:url('videos/vid_3.jpg');" ></div>
 					<div class="video_fallback" data_video-fallback="videos/vid_3.gif" ></div>
 					
@@ -655,6 +663,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 						<source type="video/webm" src="videos/vid_3.webm" />
 						<source type="video/mp4" src="videos/vid_3.mp4" />
 						
+					</div>
+					-->
+					<div class="video_placeholder" style="background-image:url('videos/vid_6.jpg');" ></div>
+					<div class="video_fallback" data_video-fallback="videos/vid_6.gif" ></div>
+					
+					<video muted loop autoplay preload="auto" webkit-playsinline="true" playsinline="true" >
+					</video>
+					<div class="video_source_dynamicload">
+						<source type="video/webm" src="videos/vid_6_720p.webm" />
+						<source type="video/mp4" src="videos/vid_6_720p.mp4" />
 					</div>
 				</div>
 				<div class="background_block">
@@ -854,7 +872,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				<div class="l-section-video">
 					<div class="video_placeholder" style="background-image:url('videos/vid_2.jpg');" ></div>
 					<div class="video_fallback" data_video-fallback="videos/vid_2.gif" ></div>
-					
+					<!--
 					<video muted loop autoplay preload="auto" webkit-playsinline="true" playsinline="true" >
 					</video>
 					<div class="video_source_dynamicload">
@@ -862,6 +880,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 						<source type="video/mp4" src="videos/vid_2_720.mp4"  media="all and (max-width: 1440px)" />
 						<source type="video/webm" src="videos/vid_2.webm" />
 						<source type="video/mp4" src="videos/vid_2.mp4" />
+					</div>
+					-->
+					<div class="video_placeholder" style="background-image:url('videos/vid_7.jpg');" ></div>
+					<div class="video_fallback" data_video-fallback="videos/vid_7.gif" ></div>
+					
+					<video muted loop autoplay preload="auto" webkit-playsinline="true" playsinline="true" >
+					</video>
+					<div class="video_source_dynamicload">
+						<source type="video/webm" src="videos/vid_7_720p.webm" />
+						<source type="video/mp4" src="videos/vid_7_720p.mp4" />
 					</div>
 				</div>
 				<div class="background_block">

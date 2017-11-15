@@ -218,7 +218,13 @@ console.log(pcIniDate);
 var offset = pcIniDate.getTimezoneOffset()*60*1000;
 //var NYCtimeoffset = -400*60*1000;
 //Coordinated with GMT Universal, which is 4 hours ahead NYC, so 15h GMT is 11am NYC
-var countdownEndDate = new Date("December 1, 2017 15:00:00");
+//this will be de fallback countdown date in case is not defined on the HTML:
+new_countDownDate = "December 1, 2017 15:00:00"; 
+//countDownDate is defined on the HTML to give an easy way to overwrite the countdown date.
+if(typeof(countDownDate) != "undefined" && countDownDate != ""){
+	new_countDownDate = countDownDate;
+}
+var countdownEndDate = new Date(new_countDownDate);
 countdownEndDate.setTime(countdownEndDate.getTime() - offset);
 var countdownEndDate_time = countdownEndDate.getTime();
 
@@ -423,7 +429,7 @@ function setStartAppear(){
 			
 		tl_playbutton.set(play_button,{clearProps:"all"})
 			.set(play_button,{position:"relative"})
-			.to(play_button,1,{rotationX:360, scale:1.2, delay:2, ease:Back.easeOut})
+			.to(play_button,1,{rotationX:360, scale:1.1, delay:2, ease:Back.easeOut})
 			.to(play_button,.5,{scale:1, ease:Power3.easeInOut})
 			.to(play_button,.1,{delay:1})
 
@@ -1292,6 +1298,8 @@ function site_secintro(_currentsec){
 		
 		if( _currentsec.find(".team_block").length > 0){
 			teamOpen(_current_memeber_index, 1)
+		}else{
+			stopAutoplayTeamSlider();
 		}
 		
 		
@@ -1792,6 +1800,8 @@ function teamOpen(_index, direction){
 	
 	updateTeamControlDots()
 	
+	activateAutoplayTeamSlider()
+	
 }
 function teamOpenNext(direction){
 	
@@ -1804,4 +1814,16 @@ function updateTeamControlDots(){
 	team_control_dots = jQuery(".team_control_dot");
 	team_control_dots.removeClass("current_item");
 	team_control_dots.eq(_current_memeber_index).addClass("current_item");
+}
+
+
+var timerTeamSlider;
+function activateAutoplayTeamSlider(){
+	stopAutoplayTeamSlider();
+	timerTeamSlider = setTimeout(function(){teamOpenNext(1)}, 7000);
+}
+function stopAutoplayTeamSlider(){
+	if(timerTeamSlider != undefined){
+		clearTimeout(timerTeamSlider);
+	}
 }
