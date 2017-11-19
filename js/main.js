@@ -15,6 +15,28 @@ var waitForFinalEvent = (function () {
   };
 })();
 
+
+
+var waitBeforeRepeatEvent = (function () {
+  var time_func = {};
+
+  return function (callback, ms, uniqueId) {
+    if (!uniqueId) {
+      uniqueId = "Don't call this twice without a uniqueId";
+    }
+	var d = new Date();
+	var t = d.getTime();
+	var new_t = d.getTime() + ms;
+    if ( ( time_func[uniqueId] && time_func[uniqueId] < t ) || !time_func[uniqueId]) {
+		time_func[uniqueId] = new_t;
+		callback();
+    }
+    
+  };
+})();
+
+
+
 readyBeforeDefinitions = [];
 jQuery(document).ready(function(){
 	Modernizr.on('videoautoplay', function(result) {
@@ -860,7 +882,7 @@ function setControls(){
 	}
 	
 	jQuery(".portfolio_control_step").click(function(){
-		animToSection(jQuery(this).attr("section_index"))
+		animToSection(parseInt(jQuery(this).attr("section_index")))
 	})
 	
 	fixLabelPosition()
@@ -996,29 +1018,61 @@ function mouseWheelWork(event, delta){
 			currentScroll = jQuery(window).scrollTop();
 			windowHeight = jQuery(window).height();
 			setCurrentSec()
-			currentSec = currentSection;
+			currentSec = parseInt(currentSection);
 			
-			if(delta > 0 && currentSec > 0){
-				if(currentSec-1 >= 0 && minDif <= 0){
-					event.preventDefault();
-					animToSection_delay(currentSec-1)
-				}
-			}else if(delta < 0){
-				if(currentSec+1 <= fullScreenSections.length-1 
-					 && (fullScreenSections.eq(currentSec).height() + fullScreenSections.eq(currentSec).offset().top - currentScroll <= windowHeight )
+			
+			_currentsec = fullScreenSections.eq(currentSec);
+			team_items = _currentsec.find("ul.team_list li")
+
+			
+				if(delta > 0 && currentSec > 0){
+					if(currentSec-1 >= 0 && minDif <= 0){
+						event.preventDefault();
+						
+						//in case you are in the first item, and goes back, then it goes to normal funcionallity scrolling sections:
+						if(_currentsec.find(".team_block").length > 0 && _current_memeber_index > 0){
+							teamOpenNext_delay(-1)
+							
+						}else{//normal functionallity:
+							animToSection_delay(currentSec-1)
+						}
+						
+					}
+				}else if(delta < 0){
+					if(currentSec+1 <= fullScreenSections.length-1 
+						 && (fullScreenSections.eq(currentSec).height() + fullScreenSections.eq(currentSec).offset().top - currentScroll <= windowHeight )
+						){
+						event.preventDefault();
+						
+						if(
+						   _currentsec.find(".team_block").length > 0
+						&& _current_memeber_index == team_items.length-1
+						&& currentSec < fullScreenSections.length-1
+						){
+							animToSection_delay(currentSec+1)
+						}else if(
+							_currentsec.find(".team_block").length > 0
+						){
+							teamOpenNext_delay(1)
+						}else{
+							animToSection_delay(currentSec+1)
+						}
+						
+					}else if(
+						_currentsec.find(".team_block").length > 0
+						&& currentSec == fullScreenSections.length-1
 					){
-					event.preventDefault();
-					animToSection_delay(currentSec+1)
-					
+						event.preventDefault();
+						teamOpenNext_delay(1)
+					}
 				}
-			}
 		}
 	
 }
 function animToSection_delay(index){
-	waitForFinalEvent(function(){
+	waitBeforeRepeatEvent(function(){
 		animToSection(index)
-    }, 10, "animToSection");
+    }, 400, "animToSection");
 }
 function animToSection(index){
 	//console.log("animToSection:"+index)
@@ -1036,12 +1090,12 @@ function animToSection(index){
 }
 
 function animToSectionNext(){
-	index = currentSection+1;
+	index = parseInt(currentSection)+1;
 	if( index <= fullScreenSections.length-1 )
 		animToSection(index)
 }
 function animToSectionPrev(){
-	index = currentSection-1;
+	index = parseInt(currentSection)-1;
 	if( index >= 0 )
 		animToSection(index)
 }
@@ -1297,7 +1351,8 @@ function site_secintro(_currentsec){
 		TweenMax.staggerFrom(nodes_copylines2, .2, {delay:fadeInDelay+.6, scaleY:0,  ease:Power1.easeOut, clearProps:"all"}, .4)
 		
 		if( _currentsec.find(".team_block").length > 0){
-			teamOpen(_current_memeber_index, 1)
+			//teamOpen(_current_memeber_index, 1)
+			teamOpen(0, 1)
 		}else{
 			stopAutoplayTeamSlider();
 		}
@@ -1611,10 +1666,10 @@ jQuery(document).ready(function(){
 _current_memeber_index = -1;
 function setTeam(){
 	jQuery(".team_controls .arrowcontrol_holder_right").click(function(){
-		teamOpenNext(1);
+		teamOpenNext_delay(1);
 	})
 	jQuery(".team_controls .arrowcontrol_holder_left").click(function(){
-		teamOpenNext(-1);
+		teamOpenNext_delay(-1);
 	})
 	team_items = jQuery("ul.team_list li")
 
@@ -1663,14 +1718,18 @@ function setTeam(){
 
 	jQuery(".team_block").closest("section").swipe( {
 		swipeLeft:function(event, direction, distance, duration, fingerCount) {
-			teamOpenNext(1);
+			teamOpenNext_delay(1);
 		},
 		swipeRight:function(event, direction, distance, duration, fingerCount) {
-			teamOpenNext(-1);
+			teamOpenNext_delay(-1);
 		},allowPageScroll:"vertical"
 	});
 	teamOpen(0, 1)
-
+	
+	_currentsec = fullScreenSections.eq(currentSec);
+	if(_currentsec.find(".team_block").length == 0){
+		stopAutoplayTeamSlider()
+	}
 }
 function teamOpen(_index, direction){
 	
@@ -1809,7 +1868,12 @@ function teamOpenNext(direction){
 
 	teamOpen(new_index, direction)
 }
-
+function teamOpenNext_delay(direction){
+	
+	waitBeforeRepeatEvent(function(){
+		teamOpenNext(direction)
+    }, 800, "animToSection");
+}
 function updateTeamControlDots(){
 	team_control_dots = jQuery(".team_control_dot");
 	team_control_dots.removeClass("current_item");

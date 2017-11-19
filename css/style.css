@@ -1531,6 +1531,7 @@ ul.roadmap_list li:nth-child(2n) .roadmap_vline {
 
 .no-touch a.w-btn.color_primary {
 	font-weight:400;
+	font-size:14px;
 }
 .no-touch a.w-btn.color_primary:before {
 	background-color:#fff;
