@@ -24,15 +24,11 @@
     $(function() {
 
 var loc = window.location.toString(),
-params = loc.split('&')[1],
-params2 = loc.split('&')[2],
-params3 = loc.split('&')[3],
-params4 = loc.split('&')[4],
-params5 = loc.split('&')[5],
-params6 = loc.split('&')[6],
-  iframe = document.getElementById('typeform-full');
-alert(iframe.src); 
-iframe.src = iframe.src + '?' + params + '&' + params2 + '&' + params3 + '&' + params4+ '&' + params5;
+    params = loc.split('?')[1],
+    iframe = document.getElementById('typeform-full');
+
+alert(iframe.src);
+iframe.src = iframe.src + '?' + params;
 alert(iframe.src); 
 
 });
