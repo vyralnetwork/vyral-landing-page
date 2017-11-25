@@ -20,17 +20,13 @@
   </style>
 </head>
 <body>
-  <script type="text/javascript">
-    $(function() {
-
-var loc = window.location.toString(),
-    params = loc.split('?')[1],
-    iframe = document.getElementById('typeform-full');
-
-iframe.src = iframe.src + '?' + params;
-
-});
-  </script>
+<script>
+  var vars={};
+  var tempstring='';
+  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, 
+                                           function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',
+                                           function() {document.getElementById('typeform-full').src='https://chronologic.typeform.com/to/Pb1tzg?'+tempstring.slice(0, -1);});}
+</script>
    <iframe id="typeform-full"
     width="100%"
     height="100%"
