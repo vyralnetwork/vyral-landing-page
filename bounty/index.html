@@ -20,6 +20,13 @@
   </style>
 </head>
 <body>
+  <script>
+  var vars={};
+  var tempstring='';
+  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, 
+                                           function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',
+                                           function() {document.getElementById('typeform-full').src='https://chronologic.typeform.com/to/w6SKsU?'+tempstring.slice(0, -1);});}
+</script>
   <iframe id="typeform-full"
     width="100%"
     height="100%"
