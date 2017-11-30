@@ -11,8 +11,6 @@ Help us improve privacy and security and bring the benefits of **SHARE** to ever
 
 To take part in this hacking competition, please read the program guidelines here.
 
-Forum members are also welcome to participate in our beta test. //TODO
-
 > If you want to make feature requests or any other suggestions, mail them to [support@vyral.zendesk.com](mailto://support@vyral.zendesk.com).
 
 
@@ -26,7 +24,7 @@ Summary on How to Participate in 3 Easy Steps
 
 - [ ] Second, Visit our marketing site at http://vyral.network
 
-- [ ] Third, if you believe you have discovered a bug or vulnerability in vyral or have encountered a security incident, report it to security@vyral.network along with your ETH Address
+- [ ] Third, if you believe you have discovered a bug or vulnerability in vyral or have encountered a security incident, report it to [security@vyral.network](mailto://security@vyral.network) along with your ETH Address
 
 
 ##### Background
