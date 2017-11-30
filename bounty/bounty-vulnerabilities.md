@@ -26,7 +26,7 @@ Summary on How to Participate in 3 Easy Steps
 
 - [ ] Second, Visit our marketing site at http://vyral.network
 
-- [ ] Third, if you believe you have discovered a bug or vulnerability in vyral or have encountered a security incident, report it to security@vyral.network
+- [ ] Third, if you believe you have discovered a bug or vulnerability in vyral or have encountered a security incident, report it to security@vyral.network along with your ETH Address
 
 
 ##### Background
@@ -73,4 +73,6 @@ Vyral will cooperate with a coordinated bug disclosure policy, and will make bes
 
 Only the first person to report a previously undiscovered vulnerability will qualify for a reward, although smaller bounties may still be given to other contributors.
 
-We plan to acknowledge all significant contributors publicly unless you tell us you prefer to remain anonymous.  You can also elect to receive a reward anonymously or to have it paid to a charitable cause of your own choosing.  If a reward is not claimed within 30 days, it will be donated to ---
+We plan to acknowledge all significant contributors publicly unless you tell us you prefer to remain anonymous.  
+
+All rewards shall be paid after the Crowd-sale.
