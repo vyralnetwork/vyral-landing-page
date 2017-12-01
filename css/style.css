@@ -3,9 +3,7 @@
 ::-webkit-scrollbar { 
     display: none; 
 }
-.section_compartir_postal{
-	display:none;
-}
+
 @font-face {
 	font-family: 'Proximanova';
 	font-weight: 400;
@@ -142,6 +140,39 @@ p,
 	left:15px;
 	z-index:70;
 }
+.join_our_list{
+	animation-name: pulse_animation;
+	animation-duration: 2000ms;
+	transform-origin:30% 50%;
+	animation-iteration-count: infinite;
+	font-weight:700!important;
+	/*animation-timing-function: ease;*/
+}
+@keyframes pulse_animation {
+	0% { transform: scale(1); }
+	30% { transform: scale(1);
+		box-shadow:0 0 0 rgba(0,0,0,.3);
+		}
+	40% { 
+		transform: scale(1.06);
+		box-shadow:-3px 3px 5px rgba(0,0,0,.3);
+	}
+	50% { 
+		transform: scale(1);
+		box-shadow:0 0 0 rgba(0,0,0,.3);
+	}
+	60% { 
+		transform: scale(1); 
+		box-shadow:0 0 0 rgba(0,0,0,.3);
+	}
+	70% { 
+		transform: scale(1.04);
+		box-shadow:-2px 2px 4px rgba(0,0,0,.3);
+	}
+	80% { transform: scale(1);box-shadow:0 0 0 rgba(0,0,0,.3); }
+	100% { transform: scale(1); }
+}
+
 .w-btn.color_primary.style_outlined {
     box-shadow: 0 0 0 2px inset;
 	}
