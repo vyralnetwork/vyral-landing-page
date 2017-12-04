@@ -234,6 +234,79 @@ function checkScrollDirectionClass(){
 }
 
 
+var getNextExpiryTime = function(){
+	// Reference: https://docs.google.com/spreadsheets/d/1kcBmx9D2IZO0YFDPikSs4EkS04IIuDNZ8sTGItZqH0I/edit#gid=0
+    // End Times (all in EST)
+    // 2nd Dec 10:59
+    // 2nd Dec 14:59
+    // 3rd Dec 23:59 to 24 Dec 23:59 reset every day to that day's end
+    // 
+    // 2/12 10:59  - 1512230399000
+    // 2/12 14:59  - 1512244799000
+    // 2/12 23:59  - 1514955599000
+    // 3/12 23:59  - 1515041999000
+    // 4/12 23:59  - 1515128399000
+    // 5/12 23:59  - 1515214799000
+    // 6/12 23:59  - 1515301199000
+    // 7/12 23:59  - 1515387599000
+    // 8/12 23:59  - 1515473999000
+    // 9/12 23:59  - 1515560399000
+    // 10/12 23:59 - 1515646799000
+    // 11/12 23:59 - 1515733199000
+    // 12/12 23:59 - 1515819599000
+    // 13/12 23:59 - 1515905999000
+    // 14/12 23:59 - 1515992399000
+    // 15/12 23:59 - 1516078799000
+    // 16/12 23:59 - 1516165199000
+    // 17/12 23:59 - 1516251599000
+    // 18/12 23:59 - 1516337999000
+    // 19/12 23:59 - 1516424399000
+    // 20/12 23:59 - 1516510799000
+    // 21/12 23:59 - 1516597199000
+    // 22/12 23:59 - 1516683599000
+    // 23/12 23:59 - 1516769999000
+    // 24/12 23:59 - 1516856399000
+
+    var endTimes = [
+        1512193919000,
+        1512230399000,
+        1512244799000,
+        1512277200000, // Dec 3, 12:00 AM EDT
+        1512363600000,
+        1512450000000,
+        1512536400000,
+        1512622800000,
+        1512709200000,
+        1512795600000,
+        1512882000000,
+        1512968400000,
+        1513054800000,
+        1513141200000,
+        1513227600000,
+        1513314000000,
+        1513400400000,
+        1513486800000,
+        1513573200000,
+        1513659600000,
+        1513746000000,
+        1513832400000,
+        1513918800000,
+        1514005200000,
+        1514091600000
+    ];
+
+    var now = new Date().getTime()
+
+    for(var i=0; i<endTimes.length; i++){
+        if(now < endTimes[i]){
+            return endTimes[i];
+        }
+    }
+
+    return 0;
+};
+
+
 
 var pcIniDate = new Date();
 console.log(pcIniDate);
@@ -246,6 +319,9 @@ new_countDownDate = "December 1, 2017 20:00:00";
 if(typeof(countDownDate) != "undefined" && countDownDate != ""){
 	new_countDownDate = countDownDate;
 }
+
+var new_countDownDate = getNextExpiryTime();
+
 var countdownEndDate = new Date(new_countDownDate);
 countdownEndDate.setTime(countdownEndDate.getTime() - offset);
 var countdownEndDate_time = countdownEndDate.getTime();
@@ -259,20 +335,26 @@ jQuery(document).ready(function(){
 	countdown_internval = setInterval(printDateCountdown, 1000);
 })
 function printDateCountdown(){
+	var now = new Date().getTime();
+	var timestampDiff = Math.trunc((new_countDownDate - now) / 1000);
+	var seconds = timestampDiff % 60;
+	var minutes = Math.trunc(timestampDiff / 60) % 60;
+	var hours = Math.trunc(timestampDiff / 60 / 60) % 24;
+	var days = Math.trunc(timestampDiff / 60 / 60 / 24);
 
 
-	  // Get todays date and time
-	  var now = new Date();
-	  now = now.getTime();
+	  // // Get todays date and time
+	  // var now = new Date();
+	  // now = now.getTime();
 
-	  // Find the distance between now an the count down date
-	  var distance = countdownEndDate_time - now;
+	  // // Find the distance between now an the count down date
+	  // var distance = countdownEndDate_time - now;
 
-	  // Time calculations for days, hours, minutes and seconds
-	  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-	  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-	  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-	  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+	  // // Time calculations for days, hours, minutes and seconds
+	  // var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	  // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	  // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	  // var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
 	  // Display the result in the element with id="demo"
 
@@ -291,8 +373,12 @@ function printDateCountdown(){
 		}else{
 			jQuery("#countdown_home").removeClass("less_than_a_day");
 		}
+
+		if(timestampDiff < 1){
+			window.location.reload()
+		}
 	  // If the count down is finished, write some text
-	  if (distance < 1000) {
+	  if (new_countDownDate === 0) {
 		clearInterval(countdown_internval);
 		jQuery("#countdown_home").addClass("less_than_a_day");
 		jQuery("#value_days").html(0);
@@ -304,7 +390,6 @@ function printDateCountdown(){
 		jQuery("#value_secs").html(0);
 		jQuery("#top_value_secs").html(0);
 		jQuery("#countdown_home").addClass("finished");
-
 	  }
 
 }
