@@ -35,6 +35,23 @@ var waitBeforeRepeatEvent = (function () {
   };
 })();
 
+function checkHBarStatus(){
+	_hbar_message = jQuery(".HB-Bar")
+	if(_hbar_message.length > 0){
+		if(_hbar_message.hasClass("hb-animateIn")){
+			jQuery("body").addClass("hasHBar")
+		}else{
+			jQuery("body").removeClass("hasHBar")
+		}
+	}
+	//console.log("checkHBarStatus")
+	waitForFinalEvent(function(){
+		checkHBarStatus()
+	}, 1000, "checkHBarStatus");
+}
+jQuery(document).ready(function(){
+	checkHBarStatus()
+})
 
 
 readyBeforeDefinitions = [];
@@ -210,7 +227,7 @@ function closeMainMenu(){
 
 
 
-
+/*
 var lastScrollTop = 0;
 jQuery(window).scroll(function(event){
 	waitForFinalEvent(function(){
@@ -232,7 +249,7 @@ function checkScrollDirectionClass(){
 	}
 	lastScrollTop = st;
 }
-
+*/
 
 var getNextExpiryTime = function(){
 	// Reference: https://docs.google.com/spreadsheets/d/1kcBmx9D2IZO0YFDPikSs4EkS04IIuDNZ8sTGItZqH0I/edit#gid=0
@@ -557,6 +574,10 @@ function setActionsVideoHome(){
 		closeVideoHome();
 	})
 	jQuery(".play_button_block").click(function(){
+		openVideoHome();
+	})
+	jQuery("a.button_play_video").click(function(e){
+		e.preventDefault();
 		openVideoHome();
 	})
 }
@@ -1315,6 +1336,12 @@ function site_secintro(_currentsec){
 			jQuery("body").addClass("hideTopCountdown")
 		}else{
 			jQuery("body").removeClass("hideTopCountdown")
+		}
+		
+		if(_currentsec.attr("id") == "home"){
+			jQuery("body").addClass("isHome")
+		}else{
+			jQuery("body").removeClass("isHome")
 		}
 
 		fadeInDelay = .5;

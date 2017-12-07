@@ -139,6 +139,12 @@ p,
 	bottom:10px;
 	left:15px;
 	z-index:70;
+	transition:all .5s;
+}
+@media (min-width: 768px) {
+	.isHome .top_side_nav{
+		bottom:-70px;
+	}
 }
 .join_our_list{
 	animation-name: pulse_animation;
@@ -186,6 +192,14 @@ p,
 .top_side_nav .w-btn.style_none{
 	padding: 0 1em;
 }
+.claim_button_center{
+	margin:60px -80px 0;
+}
+.claim_button_center a.w-btn,
+.claim_button_center a.w-btn.color_primary{
+	font-size:16px;
+	line-height:4em;
+}
 
 
 
@@ -202,6 +216,10 @@ p,
 	font-size:12px;
 	font-weight:400;
 	text-align:center;
+	transition:all .3s;
+}
+.hasHBar .main_menu_link{
+	top:60px;
 }
 .svg_icon_fill{fill:#FFFFFF;}
 .main_menu_link svg{
@@ -508,8 +526,8 @@ ul.extra_links_list li{
 
 .column_content_left{
 	width:50%;
-	padding-right:80px;
-	margin-right:-40px;
+	padding-right:120px;
+	margin-right:-60px;
 	display:-webkit-box;
 	display:-ms-flexbox;
 	display:flex;
@@ -523,11 +541,11 @@ ul.extra_links_list li{
 }
 .column_content_right{
 	width:50%;
-	padding-left:80px;
-	margin-left:-40px;
+	padding-left:120px;
+	margin-left:-60px;
 }
 .column_content_middle{
-	width:80px;
+	width:120px;
 }
 .countdown_date_item{
 	display:block;
@@ -616,7 +634,7 @@ ul.extra_links_list li{
 .vyral_logo{
 	max-width:270px;
 	margin-left:-60px;
-	margin-bottom:50px;
+	margin-bottom:100px;
 	position:relative;
 
 }
@@ -639,6 +657,10 @@ ul.extra_links_list li{
 	line-height:150%;
 
 }
+.button_play_video_h{
+	margin:20px 0;
+}
+
 
 .home_copy_title_block{
 	padding:10px 50px;
@@ -1560,7 +1582,7 @@ ul.roadmap_list li:nth-child(2n) .roadmap_vline {
 
 
 
-.no-touch a.w-btn.color_primary {
+a.w-btn.color_primary {
 	font-weight:400;
 	font-size:14px;
 }
@@ -2338,12 +2360,14 @@ top countdown
 
 .top_countdown{
 	position:fixed;
-	top:80px;
+	top:20px;
 	right:20px;
 	z-index:80;
 	transition:all .5s;
 }
-
+.hasHBar .top_countdown{
+	top:60px;
+}
 .top_countdown_date_item{
 	display:inline-block;
 	text-align:center;
@@ -2478,7 +2502,7 @@ top countdown
 	align-items:center;
 }
 .column_content_middle{
-	width:90px;
+	/*width:90px;*/
 }
 .column_content_middle .play_button_block{
 	padding:0;
@@ -2507,6 +2531,12 @@ top countdown
 	}
 }
 @media (max-width: 1500px) {
+	.claim_button_center a.w-btn, 
+	.claim_button_center a.w-btn.color_primary{
+		padding:0 2em;
+		font-size:14px;
+	}
+	
 	.l-section-h{
 		max-width:1000px;
 	}
@@ -2575,7 +2605,19 @@ top countdown
 	}
 
 }
+@media (max-width: 1480px) {
+	.hasHBar .top_countdown ,
+	.hasHBar .main_menu_link {
+		top: 20px;
+	}
+	.hasHBar.isHome .top_countdown ,
+	.hasHBar.isHome .main_menu_link {
+		top: 70px;
+	}
+}
 @media (max-width: 1400px) {
+
+
 	.roadmap_vline {
 		height: 50px;
 
@@ -2632,6 +2674,15 @@ top countdown
 }
 
 @media (max-width: 1200px) {
+	.claim_button_center {
+		margin: 120px 0 0 100px;
+	}
+	.claim_button_center a.w-btn, .claim_button_center a.w-btn.color_primary {
+		font-size: 12px;
+	}
+	a.w-btn.color_primary{
+		font-size:11px;
+	}
 	.main_menu_link {
 		width: 40px;
 		height: 40px;
@@ -2872,6 +2923,14 @@ top countdown
 	}
 }
 @media (max-width: 767px) {
+	.hasHBar .top_countdown ,
+	.hasHBar .main_menu_link {
+		top: 15px;
+	}
+	.hasHBar.isHome .top_countdown ,
+	.hasHBar.isHome .main_menu_link {
+		top: 70px;
+	}
 	.portfolio_control_step{
 		height:20px;
 		margin-bottom: 5px;
