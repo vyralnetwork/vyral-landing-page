@@ -31,6 +31,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WB8W287"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+  <script>
+  var vars={};
+  var tempstring='';
+  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, 
+                                           function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',
+                                           function() {document.getElementById('typeform-full').src='https://chronologic.typeform.com/to/WeVIeM?'+tempstring.slice(0, -1);});}
+</script>
   <iframe id="typeform-full"
     width="100%"
     height="100%"
