@@ -331,8 +331,8 @@ var countdown_internval;
 
 jQuery(document).ready(function(){
 	// Update the count down every 1 second
-	printDateCountdown()
-	countdown_internval = setInterval(printDateCountdown, 1000);
+	// printDateCountdown()
+	// countdown_internval = setInterval(printDateCountdown, 1000);
 })
 function printDateCountdown(){
 	var now = new Date().getTime();
